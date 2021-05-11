@@ -1,0 +1,24 @@
+{
+  "name": "rest_api_architecture",
+  "version": "1.0.0",
+  "description": "Backend REST API structure project",
+  "main": "./dist/index.js",
+  "scripts": {
+    "watch-tsc": "tsc -w",
+    "start": "nodemon ./dist/index.js",
+    "local": "concurrently \"npm:watch-tsc\" \"npm:start\"",
+    "test": "ts-node ./lib/index.ts"
+  },
+  "author": "Augusto Moço Zambello",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^15.0.2",
+    "dotenv": "^9.0.2",
+    "nodemon": "^2.0.7"
+  }
+}
