@@ -33,7 +33,7 @@ class Environment {
       return 'mongodb://localhost/';
     }
 
-    return 'mongodb://localhost/example';
+    return 'mongodb://localhost/data';
   }
 }
 
