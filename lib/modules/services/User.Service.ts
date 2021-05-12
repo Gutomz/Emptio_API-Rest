@@ -1,29 +1,33 @@
+import { InvalidFieldError } from '../../errors/Field.Error';
+import { UserNotFoundError } from '../../errors/NotFound.Error';
 import { IUser } from '../models/User.Model';
-import users from '../schemas/User.Schema';
+import UserSchema from '../schemas/User.Schema';
 
 class UserService {
 
-  public createUser(user_params: IUser, callback: any) {
-    const _session = new users(user_params);
-    _session.save(callback);
+  public async exist(query: any): Promise<Boolean> {
+    const user = await UserSchema.findOne(query);
+    console.log(user);
+    console.log(!!user);
+    return !!(user);
   }
 
-  public filterUser(query: any, callback: any) {
-    users.findOne(query, callback);
+  public async create(user_params: IUser) {
+    return UserSchema.create(user_params);
   }
 
-  public filterUsers(query: any, callback: any) {
-    users.findOne(query, callback);
-  }
+  public async validatePassword({ email, password }, decryption: Function) {
+    const user: any = await UserSchema.findOne({ email }).select('password');
 
-  public updateUser(user_params: IUser, callback: any) {
-    const query = { _id: user_params._id };
-    users.findOneAndUpdate(query, user_params, callback);
-  }
+    if(!user) {
+      throw new UserNotFoundError();
+    }
 
-  public deleteUser(_id: String, callback: any) {
-    const query = { _id: _id };
-    users.deleteOne(query, callback);
+    if(await decryption(password, user.password)){
+      return true;
+    }
+
+    throw new InvalidFieldError('password');
   }
 }
 

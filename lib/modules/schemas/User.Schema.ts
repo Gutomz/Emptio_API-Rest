@@ -1,10 +1,23 @@
 import * as mongoose from 'mongoose';
-import { UserConfigurations } from 'modules/models/User.Model';
+import { IUser, UserConfigurations } from '../models/User.Model';
 
 const UserSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false,
+  },
+  description: String,
+  photo: String,
   configurations: UserConfigurations,
   createdAt: String,
   updatedAt: String,

@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { UserController } from '../controllers/User.Controller';
 
 export class UserRoutes {
@@ -10,6 +10,26 @@ export class UserRoutes {
   }
 
   public static applyRoutes(router: Router) {
-    router.post(this.path, this.controller.create);
+
+    // * Register
+    router.post(this.path, this.controller.register);
+
+    // * Forgot Password
+    router.post(this.path, this.controller.forgotPassword);
+
+    // * Redefine Password
+    router.post(this.path, this.controller.redefinePassword);
+
+    // * Update By Id
+    router.put(this.path, this.controller.updateById);
+
+    // * Get Me
+    router.get(this.path, this.controller.getMe);
+
+    // * Get By Id
+    router.get(this.path, this.controller.getById);
+
+    // * Get All
+    router.get(this.path, this.controller.getAll);
   }
 }
