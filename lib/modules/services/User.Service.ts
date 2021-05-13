@@ -7,7 +7,7 @@ class UserService {
 
   public async exist(query: any): Promise<Boolean> {
     const user = await UserSchema.findOne(query);
-
+    
     return !!(user);
   }
 
