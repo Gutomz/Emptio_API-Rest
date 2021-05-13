@@ -1,21 +1,22 @@
 export interface IUserConfigurations {
-  canNotify: Boolean,
-  createdAt: String,
-  updatedAt: String,
+  canNotify: boolean,
 }
 
 export const UserConfigurations = {
-  canNotify: Boolean,
-  createdAt: String,
-  updatedAt: String,
+  canNotify: {
+    type: Boolean,
+    default: true,
+  },
 }
 
 export interface IUser {
-  _id?: String;
-  name: String;
-  email: String;
-  password: String;
-  configurations: IUserConfigurations;
-  createdAt: String,
-  updatedAt: String,
+  _id?: string;
+  name: string;
+  email: string;
+  password: string;
+  photo?: string;
+  description?: string;
+  configurations?: IUserConfigurations;
+  createdAt: string,
+  updatedAt: string,
 }

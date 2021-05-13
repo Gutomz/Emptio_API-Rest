@@ -19,12 +19,12 @@ class Environment {
       return 8082;
     } else if (this.environment === Environments.qa_environment) {
       return 8083;
-    } else {
-      return 3000;
     }
+
+     return 3000;
   }
 
-  getDataBasePath(): String {
+  getDataBasePath(): string {
     if (this.environment === Environments.prod_environment) {
       return 'mongodb://localhost/';
     } else if (this.environment === Environments.dev_environment) {
@@ -34,6 +34,18 @@ class Environment {
     }
 
     return 'mongodb://localhost/data';
+  }
+
+  getPrivateKey(): string {
+    if (this.environment === Environments.prod_environment) {
+      return 'cHJvZHVjdGlvbg';
+    } else if (this.environment === Environments.dev_environment) {
+      return 'ZGV2ZWxvcA';
+    } else if (this.environment === Environments.qa_environment) {
+      return 'cXVhbGl0eWE';
+    }
+
+    return 'bG9jYWxob3N0';
   }
 }
 
