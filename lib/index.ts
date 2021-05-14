@@ -1,6 +1,6 @@
 import { Server } from "./config/server";
 import env from './environment';
-import router from './routes/_router';
+import router from './routes';
 
 const server = new Server(router);
 

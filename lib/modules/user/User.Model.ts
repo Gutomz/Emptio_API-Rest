@@ -17,6 +17,7 @@ export interface IUser {
   photo?: string;
   description?: string;
   configurations?: IUserConfigurations;
+  recoveryCode?: string,
   createdAt: string,
   updatedAt: string,
 }

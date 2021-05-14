@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { IUser, UserConfigurations } from '../models/User.Model';
+import { IUser, UserConfigurations } from './User.Model';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -16,11 +16,28 @@ const UserSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
-  description: String,
-  photo: String,
+  description: {
+    type: String,
+    default: '',
+  },
+  photo: {
+    type: String,
+    default: '',
+  },
   configurations: UserConfigurations,
-  createdAt: String,
-  updatedAt: String,
+  recoveryCode: {
+    type: String,
+    default: null,
+    select: false,
+  },
+  createdAt: {
+    type: String,
+    required: true,
+  },
+  updatedAt: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model('User', UserSchema);

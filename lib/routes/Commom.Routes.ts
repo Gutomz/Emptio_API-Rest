@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { RESPONSE_STATUS_CODE } from '../common/enums';
+import { RESPONSE_STATUS_CODE } from '../utils/enums';
 
 export class CommonRoutes {
   public static applyRoutes(router: Router) {

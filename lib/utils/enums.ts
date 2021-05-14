@@ -11,7 +11,8 @@ export enum ERROR_NAME {
   FIELD = 'FieldError',
   UNIMPLEMENTED = 'UnimplementedError',
   NOT_FOUND = 'NotFoundError',
-  UNAUTHORIZED = 'UnauthorizedError'
+  UNAUTHORIZED = 'UnauthorizedError',
+  DUPLICATED_DOCUMENT = 'DuplicatedDocumentError'
 }
 
 export enum ERROR_CODE {
@@ -19,7 +20,21 @@ export enum ERROR_CODE {
   INTERNAL = 'internal_server_error',
   UNAUTHORIZED = 'unauthorized_error',  
   USER_NOT_FOUND = 'user_not_found_error',
+  FRIENDSHIP_NOT_FOUND = 'friendship_not_found_error',
   INVALID_FIELD = 'invalid_field_error',
   MISSING_FIELD = 'missing_field_error',
-  UNIQUE_FIELD = 'unique_field_error'
+  UNIQUE_FIELD = 'unique_field_error',
+  DUPLICATED_DOCUMENT = 'duplicated_document_error'
 }
+
+export enum FRIENDSHIP_STATUS {
+  ACCEPTED = 'accepted',
+  DECLINED = 'declined',
+  PENDING = 'pending',
+}
+
+export const FRIENDSHIP_STATUS_LIST = [
+  FRIENDSHIP_STATUS.ACCEPTED,
+  FRIENDSHIP_STATUS.DECLINED,
+  FRIENDSHIP_STATUS.PENDING,
+];

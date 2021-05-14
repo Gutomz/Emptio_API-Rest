@@ -1,11 +1,11 @@
-import { ERROR_CODE, ERROR_NAME } from "../common/enums";
+import { ERROR_CODE, ERROR_NAME } from "../utils/enums";
 
-export interface FieldError {
+export interface IFieldError {
   code: string;
   fields: Array<string>;
 }
 
-export class InvalidFieldError extends Error  implements FieldError {
+export class InvalidFieldError extends Error  implements IFieldError {
   public fields: Array<string>;
   public code: string;
 
@@ -42,7 +42,7 @@ export class MissingFieldError extends Error {
   }
 }
 
-export class UniqueFieldError extends Error  implements FieldError  {
+export class UniqueFieldError extends Error  implements IFieldError  {
   public fields: Array<string>;
   public code: string;
 

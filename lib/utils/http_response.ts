@@ -6,6 +6,9 @@ export function response_handleError(res: Response, error: any) {
     case ERROR_NAME.FIELD:
       response_fieldValidationError(res, error);
       break;
+    case ERROR_NAME.DUPLICATED_DOCUMENT:
+      response_duplicatedDocumentError(res, error);
+      break;
     case ERROR_NAME.UNIMPLEMENTED:
       response_unimplementedError(res, error);
       break;
@@ -33,6 +36,8 @@ export function response_unimplementedError(res: Response, error: any) {
   res.status(RESPONSE_STATUS_CODE.INTERNAL_SERVER_ERROR).json({
     code: error.code,
     message: error.message,
+    file: error.file,
+    method: error.method,
   });
 }
 
@@ -54,6 +59,13 @@ export function response_fieldValidationError(res: Response, error: any) {
   response_badRequestError(res, {
     message: error.message,
     fields: error.fields,
+  }, error);
+}
+
+export function response_duplicatedDocumentError(res: Response, error: any) {
+  response_badRequestError(res, {
+    message: error.message,
+    documentType: error.documentType,
   }, error);
 }
 

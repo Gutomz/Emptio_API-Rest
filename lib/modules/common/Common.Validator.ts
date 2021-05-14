@@ -4,7 +4,7 @@ import { InvalidFieldError, MissingFieldError } from '../../errors/Field.Error';
 
 class CommomValidator {
   public validate_field(value, field: string): boolean {
-    if(!value) {
+    if(value === null || value === undefined) {
       throw new MissingFieldError([field]);
     }
 
@@ -31,8 +31,18 @@ class CommomValidator {
     return true;
   }
 
-  public validate_password(password: string): boolean {
-    this.validate_field(password, 'password');
+  public validate_password(password: string, fieldName: string = 'password'): boolean {
+    this.validate_field(password, fieldName);
+
+    return true;
+  }
+
+  public validate_description(description: string): boolean {
+    this.validate_field(description, 'description');
+
+    if(description.length > 250) {
+      throw new InvalidFieldError('description (máx 250)');
+    }
 
     return true;
   }

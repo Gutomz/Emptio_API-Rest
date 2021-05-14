@@ -1,4 +1,4 @@
-import { ERROR_CODE, ERROR_NAME } from "../common/enums";
+import { ERROR_CODE, ERROR_NAME } from "../utils/enums";
 
 export class UnimplementedError extends Error {
   code: string;
@@ -6,7 +6,7 @@ export class UnimplementedError extends Error {
   method: string;
 
   constructor(file: string, method: string){
-    const message = `Uninplemented method: ${method}`
+    const message = `Unimplemented method: ${method}`
     super(message);
 
     this.file = file;

@@ -1,5 +1,5 @@
 
-import CommomValidator from "./Commom.Validator";
+import CommomValidator from "../common/Common.Validator";
 import { InvalidFieldError, MissingFieldError } from "../../errors/Field.Error";
 
 class UserValidator {

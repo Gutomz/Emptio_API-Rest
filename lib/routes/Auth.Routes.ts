@@ -6,14 +6,14 @@ export class AuthRoutes {
   private static controller: AuthController = new AuthController();
   private static path: string = "/auth";
 
-  private static getFullPath(extension: string) {
+  private static getFullPath(extension: string = "") {
     return this.path + extension;
   }
 
   public static applyRoutes(router: Router) {
 
     // * Login
-    router.post(this.path, this.controller.login);
+    router.post(this.getFullPath(), this.controller.login);
 
     // * Logout
     router.post(this.getFullPath('/logout'), authMiddleware, this.controller.logout);

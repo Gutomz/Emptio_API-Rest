@@ -1,10 +1,10 @@
 import * as bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 
-import { response_success, response_handleError } from '../common/http_response';
-import AuthValidator from '../modules/validators/Auth.Validator';
-import UserService from '../modules/services/User.Service';
-import AuthService from '../modules/services/Auth.Service';
+import { response_success, response_handleError } from '../utils/http_response';
+import AuthValidator from '../modules/auth/Auth.Validator';
+import UserService from '../modules/user/User.Service';
+import AuthService from '../modules/auth/Auth.Service';
 
 export class AuthController {
 
@@ -12,16 +12,16 @@ export class AuthController {
     try {
       AuthValidator.validate_login(req.body);
 
-      const { email } = req.body;
+      const { email, password } = req.body;
 
       const user = await UserService.findByEmail(email);
 
-      await UserService.validatePassword(req.body, bcrypt.compare);
+      await UserService.validatePassword({ email }, password, bcrypt.compare);
 
       const data = await AuthService.generateKeyPairs(user);
       response_success(res, data);
     } catch (error) {
-      response_handleError(res, error)
+      response_handleError(res, error);
     }
   }
 
@@ -46,7 +46,7 @@ export class AuthController {
       const data = await AuthService.generateKeyPairs(user);
       response_success(res, data);
     } catch (error) {
-      response_handleError(res, error)
+      response_handleError(res, error);
     }
   }
 }

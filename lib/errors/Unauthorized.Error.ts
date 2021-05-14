@@ -1,4 +1,4 @@
-import { ERROR_CODE, ERROR_NAME } from "../common/enums";
+import { ERROR_CODE, ERROR_NAME } from "../utils/enums";
 
 export class UnauthorizedError extends Error {
   code: string;

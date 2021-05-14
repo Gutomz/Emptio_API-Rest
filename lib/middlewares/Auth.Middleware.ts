@@ -1,8 +1,9 @@
 import { Response, Request, NextFunction } from 'express';
 import { VerifyOptions } from 'jsonwebtoken';
-import { response_handleError } from '../common/http_response';
+import { response_handleError } from '../utils/http_response';
 import { UnauthorizedError } from '../errors/Unauthorized.Error';
-import AuthService from '../modules/services/Auth.Service';
+import AuthService from '../modules/auth/Auth.Service';
+import UserService from '../modules/user/User.Service';
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
@@ -24,12 +25,15 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     const data: any = await AuthService.verifyToken(token, options);
 
-    req.body.userId = data.payload.id;
+    const user = await UserService.findById(data.payload.id);
+
+    req.body.user = user;
 
     next();
 
   } catch (error) {
-    response_handleError(res, error)
+    response_handleError(res, error);
+    next(false);
   }
 }
 
@@ -45,11 +49,14 @@ export async function refreshAuthMiddleware(req: Request, res: Response, next: N
 
     const data: any = await AuthService.verifyToken(refreshToken, options);
 
-    req.body.userId = data.payload.id;
+    const user = await UserService.findById(data.payload.id);
+
+    req.body.user = user;
 
     next();
 
   } catch (error) {
-    response_handleError(res, error)
+    response_handleError(res, error);
+    next(false);
   }
 }
