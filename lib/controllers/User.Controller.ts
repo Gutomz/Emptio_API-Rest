@@ -75,7 +75,7 @@ export class UserController {
 
       await UserService.validateRecoveryCode(email, code);
 
-      const encryptedPassword = await bcrypt.hash(password, 10); 
+      const encryptedPassword = await bcrypt.hash(password, 10);
 
       const user = await UserService.redefinePassword(email, encryptedPassword);
 
@@ -122,23 +122,41 @@ export class UserController {
 
   public async getById(req: Request, res: Response) {
     try {
+      const { user } = req.body;
       const { id } = req.params;
 
-      const user = await UserService.findById(id);
+      if (user.id === id) {
+        return response_success(res, user);
+      }
 
-      response_success(res, user);
+      // TODO - get posts if is friend
+      // const isFriend = await FriendshipService.isFriend(user, id);
+
+      const friend = await UserService.findById(id);
+
+      response_success(res, friend);
     } catch (error) {
       response_handleError(res, error);
     }
   }
 
-  public async getAll(req: Request, res: Response) {
+  public async get(req: Request, res: Response) {
     try {
-      // TODO - Implement filters
-      const users = await UserService.find();
+      const { query } = req;
+      const search: string = query.search ? query.search.toString() : "";
+      const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
+      const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+
+      const users = await UserService.find({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+        ]
+      }, null, { limit, skip });
 
       const data = {
         data: users,
+        count: users.length,
       };
 
       response_success(res, data);

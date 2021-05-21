@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { IUser, UserConfigurations } from './User.Model';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -24,7 +23,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  configurations: UserConfigurations,
+  configurations: {
+    type: Object,
+    select: false,
+    canNotify: {
+      type: Boolean,
+      default: true,
+    },
+  },
   recoveryCode: {
     type: String,
     default: null,
@@ -38,6 +44,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+UserSchema.index({
+  name: 'text',
+  email: 'text',
 });
 
 export default mongoose.model('User', UserSchema);

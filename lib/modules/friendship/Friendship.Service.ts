@@ -10,6 +10,12 @@ class FriendshipService {
     return !!(friendship);
   }
 
+  public async isFriend(user: any, friendId: string) {
+    const friendship = await FriendshipSchema.findOne({ owner: user.id, friend: friendId });
+
+    return !!(friendship);
+  }
+
   public async create(params: IFriendship) {
     return FriendshipSchema.create(params);
   }

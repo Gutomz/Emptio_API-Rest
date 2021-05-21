@@ -30,7 +30,7 @@ export class UserRoutes {
     // * Get By Id
     router.get(this.getFullPath('/:id'), authMiddleware, this.controller.getById);
 
-    // * Get All
-    router.get(this.getFullPath(), authMiddleware, this.controller.getAll);
+    // * Get
+    router.get(this.getFullPath(), authMiddleware, this.controller.get);
   }
 }

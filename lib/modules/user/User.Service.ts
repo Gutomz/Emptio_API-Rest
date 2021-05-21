@@ -27,8 +27,8 @@ class UserService {
     return user;
   }
 
-  public async findById(_id: string) {
-    const user = await UserSchema.findOne({ _id });
+  public async findById(_id: string, projection?: any, options?: QueryOptions) {
+    const user = await UserSchema.findById(_id, projection, options);
 
     if (!user) {
       throw new UserNotFoundError();
@@ -39,6 +39,10 @@ class UserService {
 
   public async find(query?: FilterQuery<IUser>, projection?: any, options?: QueryOptions) {
     return UserSchema.find(query, projection, options);
+  }
+
+  public async findOne(query?: FilterQuery<IUser>, projection?: any, options?: QueryOptions) {
+    return UserSchema.findOne(query, projection, options);
   }
 
   public async validatePassword(query: { email?: string, id?: string }, password: string, decryption: Function, fieldName: string = 'password') {

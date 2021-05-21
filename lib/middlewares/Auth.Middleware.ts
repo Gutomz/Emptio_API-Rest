@@ -25,7 +25,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
     const data: any = await AuthService.verifyToken(token, options);
 
-    const user = await UserService.findById(data.payload.id);
+    const user = await UserService.findById(data.payload.id, '+configurations');
 
     req.body.user = user;
 
