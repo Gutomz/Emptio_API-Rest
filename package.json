@@ -12,6 +12,7 @@
   "author": "Augusto Moço Zambello",
   "license": "ISC",
   "dependencies": {
+    "base64-to-image": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "email-validator": "^2.0.4",
     "express": "^4.17.1",
