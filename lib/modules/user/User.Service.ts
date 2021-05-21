@@ -59,7 +59,7 @@ class UserService {
     throw new InvalidFieldError(fieldName);
   }
 
-  public async updateById(id: string, data: object, options: QueryOptions) {
+  public async updateById(id: string, data: object, options?: QueryOptions) {
     return UserSchema.findByIdAndUpdate(id, data, options);
   }
 

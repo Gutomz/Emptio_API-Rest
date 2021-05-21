@@ -18,22 +18,23 @@ class UserValidator {
     return true;
   }
 
-  async validate_update(params: { user, name, description, actualPassword, newPassword }, passwordCompare: Function): Promise<boolean> {
-    const { user, name, description, actualPassword, newPassword } = params;
+  async validate_update({ user, name, description, photo }): Promise<boolean> {
+    CommomValidator.validate_name(name);
+    CommomValidator.validate_description(description);
 
-    if (name) {
-      CommomValidator.validate_name(name);
+    if (photo && user.photo !== photo) {
+      CommomValidator.validate_base64_url(photo, 'photo');
     }
 
-    if (description) {
-      CommomValidator.validate_description(description);
-    }
+    return true;
+  }
 
-    if (newPassword) {
-      CommomValidator.validate_password(actualPassword, 'actualPassword');
+  async validate_change_password({ user, actualPassword, newPassword }, passwordCompare: Function): Promise<boolean> {
 
-      await UserService.validatePassword({ id: user._id }, actualPassword, passwordCompare, 'actualPassword');
-    }
+    CommomValidator.validate_password(actualPassword, 'actualPassword');
+    CommomValidator.validate_password(newPassword, 'newPassword');
+
+    await UserService.validatePassword({ id: user._id }, actualPassword, passwordCompare, 'actualPassword');
 
     return true;
   }
@@ -43,7 +44,7 @@ class UserValidator {
 
     CommomValidator.validate_email(email);
 
-    if(!await UserService.exist({ email })) {
+    if (!await UserService.exist({ email })) {
       throw new UserNotFoundError()
     }
 
@@ -57,10 +58,12 @@ class UserValidator {
     CommomValidator.validate_password(password);
     CommomValidator.validate_field(code, 'code');
 
-    if(!await UserService.exist({ $and: [
-      { email },
-      { recoveryCode: code },
-    ] })) {
+    if (!await UserService.exist({
+      $and: [
+        { email },
+        { recoveryCode: code },
+      ]
+    })) {
       throw new UserNotFoundError()
     }
 

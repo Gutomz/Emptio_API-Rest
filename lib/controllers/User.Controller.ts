@@ -13,6 +13,7 @@ import { UniqueFieldError } from '../errors/Field.Error';
 import AuthService from '../modules/auth/Auth.Service';
 import MailService from '../modules/mail/Mail.Service';
 import { formatDate } from '../utils/date';
+import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
 
 export class UserController {
   public async register(req: Request, res: Response) {
@@ -28,15 +29,18 @@ export class UserController {
 
       const dateNow: string = formatDate(moment());
 
-      // TODO - Validate and save profile photo
+      let upload: IUploadResponse;
+      if (photo) {
+        upload = await UploadService.uploadProfilePhoto(photo);
+      }
 
       const encryptedPassword = await bcrypt.hash(password, 10);
 
       const user_model: IUser = {
         name,
         email,
+        photo: upload && upload.link,
         password: encryptedPassword,
-        photo,
         createdAt: dateNow,
         updatedAt: dateNow,
       }
@@ -87,19 +91,48 @@ export class UserController {
     }
   }
 
+  public async changePassword(req: Request, res: Response) {
+    try {
+      await UserValidator.validate_change_password(req.body, bcrypt.compare);
+
+      const { user, newPassword } = req.body;
+
+      const data = {
+        password: await bcrypt.hash(newPassword, 10),
+      };
+
+      await UserService.updateById(user._id, data);
+
+      response_success(res);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
   public async updateMe(req: Request, res: Response) {
     try {
-      UserValidator.validate_update(req.body, bcrypt.compare);
+      await UserValidator.validate_update(req.body);
 
-      const { user, name, description, newPassword, photo } = req.body;
+      const { user, name, description, photo } = req.body;
 
-      // TODO - Validate and save photo
+      let newPhoto: string = "";
+      if (user.photo !== photo) {
+        if (user.photo) {
+          await UploadService.deleteLink(user.photo);
+        }
+
+        if (photo) {
+          const upload: IUploadResponse =
+            await UploadService.uploadProfilePhoto(photo, user);
+
+          newPhoto = upload.link;
+        }
+      } else newPhoto = user.photo;
 
       const update_data = {
-        name: name || user.name,
-        description: description || user.description,
-        password: newPassword ? await bcrypt.hash(newPassword, 10) : user.password,
-        photo: photo || user.photo,
+        name,
+        description,
+        photo: newPhoto,
       }
 
       const newUser = await UserService.updateById(user._id, update_data, { new: true });
@@ -129,12 +162,9 @@ export class UserController {
         return response_success(res, user);
       }
 
-      // TODO - get posts if is friend
-      // const isFriend = await FriendshipService.isFriend(user, id);
+      const response = await UserService.findById(id);
 
-      const friend = await UserService.findById(id);
-
-      response_success(res, friend);
+      response_success(res, response);
     } catch (error) {
       response_handleError(res, error);
     }

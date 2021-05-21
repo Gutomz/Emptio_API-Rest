@@ -6,9 +6,11 @@ enum Environments {
 }
 
 class Environment {
-  private environment: String;
+  private environment: string;
+  public endpoint: string = '/api';
+  public static: string = '/static';
 
-  constructor(environment: String) {
+  constructor(environment: string) {
     this.environment = environment;
   }
 
@@ -46,6 +48,28 @@ class Environment {
     }
 
     return 'bG9jYWxob3N0';
+  }
+
+  getUploadsPath(): string {
+    const path = __dirname.replace('\\dist', '').replace(/\\/g, "/");
+    const extension = '/uploads';
+    return path + extension;
+  }
+
+  getApiURL(): string {
+    if (this.environment === Environments.prod_environment) {
+      return `http://localhost:${this.getPort()}${this.endpoint}`;
+    } else if (this.environment === Environments.dev_environment) {
+      return `http://localhost:${this.getPort()}${this.endpoint}`;
+    } else if (this.environment === Environments.qa_environment) {
+      return `http://localhost:${this.getPort()}${this.endpoint}`;
+    }
+
+    return `http://localhost:${this.getPort()}${this.endpoint}`;
+  }
+
+  getStaticURL(): string {
+    return this.getApiURL() + this.static;
   }
 }
 

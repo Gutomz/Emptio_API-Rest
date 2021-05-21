@@ -21,6 +21,9 @@ export class UserRoutes {
     // * Redefine Password
     router.post(this.getFullPath('/redefine-password'), this.controller.redefinePassword);
 
+    // * Change Password
+    router.patch(this.getFullPath('/me'), authMiddleware, this.controller.changePassword);
+
     // * Update By Id
     router.put(this.getFullPath('/me'), authMiddleware, this.controller.updateMe);
 

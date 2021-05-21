@@ -14,7 +14,7 @@ export class Server {
     this.config();
     this.mongoSetup();
 
-    this.app.use('/api', router);
+    this.app.use(environment.endpoint, router);
   }
 
   private config(): void {

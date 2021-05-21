@@ -46,6 +46,11 @@ class CommomValidator {
 
     return true;
   }
+
+  public validate_base64_url(base64url: string, fieldName: string): boolean {
+    // TODO - validate base64url
+    return true;
+  }
 }
 
 export default new CommomValidator();
