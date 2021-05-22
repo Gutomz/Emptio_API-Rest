@@ -51,6 +51,22 @@ class CommomValidator {
     // TODO - validate base64url
     return true;
   }
+
+  public validate_location(location: string): boolean {
+    this.validate_field(location, 'location');
+
+    const coords = location.split(',');
+
+    if(coords.length !== 2) throw new InvalidFieldError('location');
+
+    try {
+      for (let coord in coords) parseFloat(coord);
+    } catch (error) {
+      throw new InvalidFieldError('location');
+    }
+    
+    return true;
+  }
 }
 
 export default new CommomValidator();

@@ -194,4 +194,18 @@ export class UserController {
       response_handleError(res, error);
     }
   }
+
+  public async updateLocation(req: Request, res: Response) {
+    try {
+      await UserValidator.validate_update_location(req.body);
+
+      const { user, location } = req.body;
+
+      const response = await UserService.updateById(user.id, { location }, { new: true });
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
 }

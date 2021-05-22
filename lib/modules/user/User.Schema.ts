@@ -36,6 +36,11 @@ const UserSchema = new mongoose.Schema({
     default: null,
     select: false,
   },
+  location: {
+    type: String,
+    default: null,
+    select: false,
+  },
   createdAt: {
     type: String,
     required: true,

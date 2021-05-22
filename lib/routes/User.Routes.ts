@@ -35,5 +35,8 @@ export class UserRoutes {
 
     // * Get
     router.get(this.getFullPath(), authMiddleware, this.controller.get);
+
+    // * Update Location
+    router.patch(this.getFullPath('/location'), authMiddleware, this.controller.updateLocation);
   }
 }

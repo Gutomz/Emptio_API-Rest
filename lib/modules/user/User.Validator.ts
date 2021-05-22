@@ -30,12 +30,12 @@ class UserValidator {
   }
 
   async validate_change_password({ user, actualPassword, newPassword }, passwordCompare: Function): Promise<boolean> {
-
     CommomValidator.validate_password(actualPassword, 'actualPassword');
     CommomValidator.validate_password(newPassword, 'newPassword');
 
-    await UserService.validatePassword({ id: user._id }, actualPassword, passwordCompare, 'actualPassword');
-
+    await UserService.validatePassword(
+      { _id: user._id }, actualPassword, passwordCompare, 'actualPassword');
+      
     return true;
   }
 
@@ -66,6 +66,12 @@ class UserValidator {
     })) {
       throw new UserNotFoundError()
     }
+
+    return true;
+  }
+
+  async validate_update_location({ location }): Promise<boolean> {
+    CommomValidator.validate_location(location);
 
     return true;
   }
