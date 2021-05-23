@@ -71,6 +71,18 @@ class Environment {
   getStaticURL(): string {
     return this.getApiURL() + this.static;
   }
+
+  getGoogleApiKey(): string {
+    if (this.environment === Environments.prod_environment) {
+      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+    } else if (this.environment === Environments.dev_environment) {
+      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+    } else if (this.environment === Environments.qa_environment) {
+      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+    }
+
+    return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+  }
 }
 
 export default new Environment(

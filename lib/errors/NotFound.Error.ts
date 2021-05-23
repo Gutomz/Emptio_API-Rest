@@ -25,3 +25,14 @@ export class FriendshipNotFoundError extends Error  implements INotFoundError {
     this.name = ERROR_NAME.NOT_FOUND;
   }
 }
+
+export class MarketNotFoundError extends Error  implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Market not found!");
+
+    this.code = ERROR_CODE.MARKET_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}

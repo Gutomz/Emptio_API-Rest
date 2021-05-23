@@ -1,6 +1,7 @@
 import * as email_validator from 'email-validator';
 
 import { InvalidFieldError, MissingFieldError } from '../../errors/Field.Error';
+import { parseLocation } from '../../utils/string';
 
 class CommomValidator {
   public validate_field(value, field: string): boolean {
@@ -55,13 +56,7 @@ class CommomValidator {
   public validate_location(location: string): boolean {
     this.validate_field(location, 'location');
 
-    const coords = location.split(',');
-
-    if(coords.length !== 2) throw new InvalidFieldError('location');
-
-    try {
-      for (let coord in coords) parseFloat(coord);
-    } catch (error) {
+    if(!parseLocation(location)) {
       throw new InvalidFieldError('location');
     }
     

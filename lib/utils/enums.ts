@@ -21,6 +21,7 @@ export enum ERROR_CODE {
   UNAUTHORIZED = 'unauthorized_error',  
   USER_NOT_FOUND = 'user_not_found_error',
   FRIENDSHIP_NOT_FOUND = 'friendship_not_found_error',
+  MARKET_NOT_FOUND = 'market_not_found_error',
   INVALID_FIELD = 'invalid_field_error',
   MISSING_FIELD = 'missing_field_error',
   UNIQUE_FIELD = 'unique_field_error',
