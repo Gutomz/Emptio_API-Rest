@@ -4,16 +4,21 @@ import UserService from './User.Service';
 import CommomValidator from '../common/Common.Validator';
 
 class UserValidator {
-  validate_register(params: { name, email, password, photo? }): boolean {
+  validate_register(params: { name, email, password, location, photo? }): boolean {
     if (!params) {
-      throw new MissingFieldError(['name', 'email', 'password']);
+      throw new MissingFieldError(['name', 'email', 'password', 'location']);
     }
 
-    const { name, email, password } = params;
+    const { name, email, password, location, photo } = params;
 
     CommomValidator.validate_name(name);
     CommomValidator.validate_email(email);
     CommomValidator.validate_password(password);
+    CommomValidator.validate_location(location);
+
+    if (photo) {
+      CommomValidator.validate_base64_url(photo, 'photo');
+    }
 
     return true;
   }

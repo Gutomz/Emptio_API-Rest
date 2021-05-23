@@ -1,4 +1,12 @@
 import * as mongoose from 'mongoose';
+import { LocationSchema } from '../common/Common.Schemas';
+
+const ConfigurationSchema = new mongoose.Schema({
+  canNotify: {
+    type: Boolean,
+    default: true,
+  },
+});
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -24,12 +32,8 @@ const UserSchema = new mongoose.Schema({
     default: '',
   },
   configurations: {
-    type: Object,
+    type: ConfigurationSchema,
     select: false,
-    canNotify: {
-      type: Boolean,
-      default: true,
-    },
   },
   recoveryCode: {
     type: String,
@@ -37,9 +41,9 @@ const UserSchema = new mongoose.Schema({
     select: false,
   },
   location: {
-    type: String,
-    default: null,
+    type: LocationSchema,
     select: false,
+    required: true,
   },
   createdAt: {
     type: String,

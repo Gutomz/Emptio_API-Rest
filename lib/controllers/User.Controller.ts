@@ -14,13 +14,14 @@ import AuthService from '../modules/auth/Auth.Service';
 import MailService from '../modules/mail/Mail.Service';
 import { formatDate } from '../utils/date';
 import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
+import { parseLocation } from '../utils/string';
 
 export class UserController {
   public async register(req: Request, res: Response) {
     try {
       UserValidator.validate_register(req.body);
 
-      const { name, email, password, photo } = req.body;
+      const { name, email, password, location, photo } = req.body;
 
       const exist = await UserService.exist({ email });
       if (exist) {
@@ -41,6 +42,7 @@ export class UserController {
         email,
         photo: upload && upload.link,
         password: encryptedPassword,
+        location: parseLocation(location),
         createdAt: dateNow,
         updatedAt: dateNow,
       }
@@ -199,9 +201,11 @@ export class UserController {
     try {
       await UserValidator.validate_update_location(req.body);
 
-      const { user, location } = req.body;
+      const { user, location: _location } = req.body;
 
-      const response = await UserService.updateById(user.id, { location }, { new: true });
+      const location = parseLocation(_location);
+
+      const response = await UserService.updateById(user.id, { location }, { new: true, projection: "+location +configurations" });
 
       response_success(res, response);
     } catch (error) {

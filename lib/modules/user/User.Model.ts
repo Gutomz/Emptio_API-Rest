@@ -1,3 +1,5 @@
+import { ILocation } from "../common/Common.Models";
+
 export interface IUserConfigurations {
   canNotify: boolean,
 }
@@ -11,7 +13,7 @@ export interface IUser {
   description?: string;
   configurations?: IUserConfigurations;
   recoveryCode?: string,
-  location?: string,
+  location: ILocation,
   createdAt: string,
   updatedAt: string,
 }
