@@ -39,3 +39,17 @@ export const FRIENDSHIP_STATUS_LIST = [
   FRIENDSHIP_STATUS.DECLINED,
   FRIENDSHIP_STATUS.PENDING,
 ];
+
+export enum MEASUREMENT_TYPE {
+  Kg = 'Kg',
+  g = 'g',
+  L = 'L',
+  ml = 'ml',
+}
+
+export const MEASUREMENT_TYPE_LIST = [
+  MEASUREMENT_TYPE.Kg,
+  MEASUREMENT_TYPE.g,
+  MEASUREMENT_TYPE.L,
+  MEASUREMENT_TYPE.ml,
+];

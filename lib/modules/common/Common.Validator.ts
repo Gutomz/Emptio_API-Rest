@@ -1,7 +1,9 @@
 import * as email_validator from 'email-validator';
 
 import { InvalidFieldError, MissingFieldError } from '../../errors/Field.Error';
+import { MEASUREMENT_TYPE_LIST } from '../../utils/enums';
 import { parseLocation } from '../../utils/string';
+import { IMeasurement } from './Common.Models';
 
 class CommomValidator {
   public validate_field(value, field: string): boolean {
@@ -60,6 +62,40 @@ class CommomValidator {
       throw new InvalidFieldError('location');
     }
     
+    return true;
+  }
+
+  public validate_measurement(measurement: any, fieldName: string): boolean {
+    this.validate_field(measurement, fieldName);
+
+    const parse: IMeasurement = measurement;
+
+    if(!parse.value || !parse.unit) {
+      throw new InvalidFieldError(fieldName);
+    }
+
+    if(parse.value < 0) {
+      throw new InvalidFieldError(`${fieldName}.value`);
+    }
+
+    if(!MEASUREMENT_TYPE_LIST.find(x => x === parse.unit)) {
+      throw new InvalidFieldError(`${fieldName}.unit`);
+    }
+
+    return true;
+  }
+
+  public validate_string_array(data: any, fieldName: string): boolean {
+    this.validate_field(data, fieldName);
+
+    if(!Array.isArray(data)) {
+      throw new InvalidFieldError(fieldName);
+    }
+
+    if(data.length > 0 && typeof data[0] !== 'string') {
+      throw new InvalidFieldError(fieldName);
+    }
+
     return true;
   }
 }
