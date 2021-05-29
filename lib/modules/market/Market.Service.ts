@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Place } from '@googlemaps/google-maps-services-js';
-import { Document, QueryOptions, UpdateQuery } from 'mongoose';
+import { Document, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { IMarket } from './Market.Model';
 import MarketSchema from './Market.Schema';
 import MapsService from '../maps/Maps.Service';
@@ -8,6 +8,11 @@ import { formatDate } from '../../utils/date';
 import { InvalidFieldError } from '../../errors/Field.Error';
 
 class MarketService {
+
+  public async exist(query: FilterQuery<IMarket>): Promise<Boolean> {
+    return !!(await MarketSchema.findOne(query));
+  }
+
   private parsePlaceDataToMarket(place: Place): IMarket {
     return {
       place_id: place.place_id,

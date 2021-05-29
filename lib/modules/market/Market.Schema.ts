@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import DBModels from '../../config/models';
 import { LocationSchema } from '../common/Common.Schemas';
 
 const MarketSchema = new mongoose.Schema({
@@ -49,4 +50,4 @@ MarketSchema.index({
   address: 'text',
 });
 
-export default mongoose.model('Market', MarketSchema);
+export default mongoose.model(DBModels.MARKET, MarketSchema);

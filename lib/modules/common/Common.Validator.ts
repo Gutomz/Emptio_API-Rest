@@ -1,4 +1,5 @@
 import * as email_validator from 'email-validator';
+import { Types } from 'mongoose';
 
 import { InvalidFieldError, MissingFieldError } from '../../errors/Field.Error';
 import { MEASUREMENT_TYPE_LIST } from '../../utils/enums';
@@ -7,7 +8,7 @@ import { IMeasurement } from './Common.Models';
 
 class CommomValidator {
   public validate_field(value, field: string): boolean {
-    if(value === null || value === undefined) {
+    if (value === null || value === undefined) {
       throw new MissingFieldError([field]);
     }
 
@@ -27,7 +28,7 @@ class CommomValidator {
   public validate_email(email: string): boolean {
     this.validate_field(email, 'email');
 
-    if(!email_validator.validate(email)) {
+    if (!email_validator.validate(email)) {
       throw new InvalidFieldError('email');
     }
 
@@ -43,7 +44,7 @@ class CommomValidator {
   public validate_description(description: string): boolean {
     this.validate_field(description, 'description');
 
-    if(description.length > 250) {
+    if (description.length > 250) {
       throw new InvalidFieldError('description (máx 250)');
     }
 
@@ -58,10 +59,10 @@ class CommomValidator {
   public validate_location(location: string): boolean {
     this.validate_field(location, 'location');
 
-    if(!parseLocation(location)) {
+    if (!parseLocation(location)) {
       throw new InvalidFieldError('location');
     }
-    
+
     return true;
   }
 
@@ -70,15 +71,15 @@ class CommomValidator {
 
     const parse: IMeasurement = measurement;
 
-    if(!parse.value || !parse.unit) {
+    if (!parse.value || !parse.unit) {
       throw new InvalidFieldError(fieldName);
     }
 
-    if(parse.value < 0) {
+    if (parse.value < 0) {
       throw new InvalidFieldError(`${fieldName}.value`);
     }
 
-    if(!MEASUREMENT_TYPE_LIST.find(x => x === parse.unit)) {
+    if (!MEASUREMENT_TYPE_LIST.find(x => x === parse.unit)) {
       throw new InvalidFieldError(`${fieldName}.unit`);
     }
 
@@ -88,15 +89,33 @@ class CommomValidator {
   public validate_string_array(data: any, fieldName: string): boolean {
     this.validate_field(data, fieldName);
 
-    if(!Array.isArray(data)) {
+    if (!Array.isArray(data)) {
       throw new InvalidFieldError(fieldName);
     }
 
-    if(data.length > 0 && typeof data[0] !== 'string') {
+    if (data.length > 0 && typeof data[0] !== 'string') {
       throw new InvalidFieldError(fieldName);
     }
 
     return true;
+  }
+
+  public validate_number(field: any, fieldName: string): boolean {
+    if (typeof field !== 'number')
+      throw new InvalidFieldError(fieldName);
+
+    return true;
+  }
+
+  public validate_object_id(field: any, fieldName: string): boolean {
+    this.validate_field(field, fieldName);
+
+    try {
+      Types.ObjectId(field);
+      return true;
+    } catch (error) {
+      throw new InvalidFieldError(fieldName);
+    }
   }
 }
 

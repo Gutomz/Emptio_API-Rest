@@ -59,3 +59,21 @@ export class UniqueFieldError extends Error  implements IFieldError  {
     this.name = ERROR_NAME.FIELD;
   }
 }
+
+export class DuplicatedItemError extends Error implements IFieldError {
+  public fields: Array<string>;
+  public code: string;
+
+  constructor(fields: Array<string> | string){
+    let message = "Duplicated product item: ";
+    message = message.concat(Array.isArray(fields) 
+      ? fields.join(', ') 
+      : fields);
+
+    super(message);
+
+    this.fields = Array.isArray(fields) ? fields : [fields];
+    this.code = ERROR_CODE.DUPLICATED_ITEM;
+    this.name = ERROR_NAME.FIELD;
+  }
+}

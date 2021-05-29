@@ -5,6 +5,7 @@ export enum RESPONSE_STATUS_CODE {
   INTERNAL_SERVER_ERROR = 500,
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
+  NOT_ALLOWED = 405,
 }
 
 export enum ERROR_NAME {
@@ -12,20 +13,26 @@ export enum ERROR_NAME {
   UNIMPLEMENTED = 'UnimplementedError',
   NOT_FOUND = 'NotFoundError',
   UNAUTHORIZED = 'UnauthorizedError',
-  DUPLICATED_DOCUMENT = 'DuplicatedDocumentError'
+  NOT_ALLOWED = 'NotAllowedError',
+  DUPLICATED_DOCUMENT = 'DuplicatedDocumentError',
 }
 
 export enum ERROR_CODE {
   UNIMPLEMENTED = 'unimplemented_error',
   INTERNAL = 'internal_server_error',
-  UNAUTHORIZED = 'unauthorized_error',  
+  UNAUTHORIZED = 'unauthorized_error',
+  NOT_ALLOWED = 'not_allowed_error',
   USER_NOT_FOUND = 'user_not_found_error',
   FRIENDSHIP_NOT_FOUND = 'friendship_not_found_error',
   MARKET_NOT_FOUND = 'market_not_found_error',
+  PURCHASE_NOT_FOUND = 'purchase_not_found_error',
+  PURCHASE_ITEM_NOT_FOUND = 'purchase_item_not_found_error',
+  PRODUCT_NOT_FOUND = 'product_not_found_error',
   INVALID_FIELD = 'invalid_field_error',
   MISSING_FIELD = 'missing_field_error',
   UNIQUE_FIELD = 'unique_field_error',
-  DUPLICATED_DOCUMENT = 'duplicated_document_error'
+  DUPLICATED_DOCUMENT = 'duplicated_document_error',
+  DUPLICATED_ITEM = 'duplicated_item_error',
 }
 
 export enum FRIENDSHIP_STATUS {
@@ -52,4 +59,14 @@ export const MEASUREMENT_TYPE_LIST = [
   MEASUREMENT_TYPE.g,
   MEASUREMENT_TYPE.L,
   MEASUREMENT_TYPE.ml,
+];
+
+export enum PURCHASE_STATUS {
+  OPEN = 'open',
+  CLOSED = 'closed',
+}
+
+export const PURCHASE_STATUS_LIST = [
+  PURCHASE_STATUS.OPEN,
+  PURCHASE_STATUS.CLOSED,
 ];

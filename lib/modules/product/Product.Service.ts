@@ -10,6 +10,22 @@ class ProductService {
     return tags.map(tag => tag.toLowerCase().replace(/ /g, '-'));
   }
 
+  public productModel(product: any): IProduct {
+    const _return: IProduct = {
+      name: product.name,
+      variation: product.variation,
+      weight: product.weight,
+      tags: product.tags,
+      image: product.image,
+    };
+
+    return _return;
+  }
+
+  public async exist(query: FilterQuery<IProduct>): Promise<Boolean> {
+    return !!(await ProductSchema.findOne(query));
+  }
+
   async create(product: IProduct): Promise<Document<IProduct>> {
     product.createdAt = product.updatedAt = formatDate(moment());
     product.tags = this.formatTags(product.tags);

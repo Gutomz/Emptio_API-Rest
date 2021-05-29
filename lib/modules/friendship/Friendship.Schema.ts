@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import DBModels from '../../config/models';
 import { FRIENDSHIP_STATUS, FRIENDSHIP_STATUS_LIST } from '../../utils/enums';
 
 const FriendshipSchema = new mongoose.Schema({
@@ -29,4 +30,4 @@ const FriendshipSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model('Friendship', FriendshipSchema);
+export default mongoose.model(DBModels.FRIENDSHIP, FriendshipSchema);

@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import DBModels from '../../config/models';
 import { LocationSchema } from '../common/Common.Schemas';
 
 const ConfigurationSchema = new mongoose.Schema({
@@ -60,4 +61,4 @@ UserSchema.index({
   email: 'text',
 });
 
-export default mongoose.model('User', UserSchema);
+export default mongoose.model(DBModels.USER, UserSchema);

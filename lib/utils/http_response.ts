@@ -18,6 +18,9 @@ export function response_handleError(res: Response, error: any) {
     case ERROR_NAME.UNAUTHORIZED:
       response_unauthorizedError(res, error);
       break;
+    case ERROR_NAME.NOT_ALLOWED:
+      response_notAllowedError(res, error);
+      break;
     default:
       response_internalServerError(res, error);
       break;
@@ -43,6 +46,13 @@ export function response_unimplementedError(res: Response, error: any) {
 
 export function response_unauthorizedError(res: Response, error: any) {
   res.status(RESPONSE_STATUS_CODE.UNAUTHORIZED).json({
+    code: error.code,
+    message: error.message,
+  });
+}
+
+export function response_notAllowedError(res: Response, error: any) {
+  res.status(RESPONSE_STATUS_CODE.NOT_ALLOWED).json({
     code: error.code,
     message: error.message,
   });

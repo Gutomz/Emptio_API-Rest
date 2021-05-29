@@ -1,7 +1,15 @@
 import { MissingFieldError } from "../../errors/Field.Error";
+import { ProductNotFoundError } from "../../errors/NotFound.Error";
 import CommonValidator from "../common/Common.Validator";
+import ProductService from "./Product.Service";
 
 class ProductValidator {
+
+  async validate_product_exist(id: string) {
+    if(!(await ProductService.exist({ _id: id }))) {
+      throw new ProductNotFoundError();
+    }
+  }
 
   async validate_create({ name, variation, weight, tags }) {
     CommonValidator.validate_field(name, 'name');

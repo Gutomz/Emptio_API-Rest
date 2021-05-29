@@ -36,3 +36,36 @@ export class MarketNotFoundError extends Error  implements INotFoundError {
     this.name = ERROR_NAME.NOT_FOUND;
   }
 }
+
+export class PurchaseNotFoundError extends Error  implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Purchase not found!");
+
+    this.code = ERROR_CODE.PURCHASE_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
+
+export class PurchaseItemNotFoundError extends Error  implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Purchase Item not found!");
+
+    this.code = ERROR_CODE.PURCHASE_ITEM_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
+
+export class ProductNotFoundError extends Error  implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Product not found!");
+
+    this.code = ERROR_CODE.PRODUCT_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
