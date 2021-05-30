@@ -91,6 +91,12 @@ class BasePurchaseService {
     return BasePurchaseSchema.find(query, projection, options)
       .populate([{ path: 'items', populate: { path: 'product' } }]);
   }
+
+  public async findItems(basePurchase_id: string) {
+    const _doc = await this.findByIdPopulated(basePurchase_id);
+    const items: Document<IBasePurchaseItem>[] = _doc.get('items');
+    return items;
+  }
 }
 
 export default new BasePurchaseService();

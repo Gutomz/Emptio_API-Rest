@@ -2,6 +2,8 @@ import * as moment from 'moment';
 import { FilterQuery, QueryOptions, Document, UpdateWithAggregationPipeline, UpdateQuery, Types, Query } from 'mongoose';
 import { formatDate } from '../../utils/date';
 import { PURCHASE_STATUS } from '../../utils/enums';
+import { IBasePurchaseItem } from '../base_purchase/BasePurchase.Model';
+import BasePurchaseService from '../base_purchase/BasePurchase.Service';
 import { IProductMarket } from '../product_market/ProductMarket.Model';
 import ProductMarketService from '../product_market/ProductMarket.Service';
 import { IPurchase, IPurchaseItem } from './Purchase.Model';
@@ -27,9 +29,18 @@ class PurchaseService {
     return !!(await PurchaseSchema.findOne(query));
   }
 
-  public async create(model: IPurchase): Promise<Document<IPurchase>> {
+  public async create(model: IPurchase, basePurchase_id: string) {
     model.createdAt = model.updatedAt = formatDate(moment());
-    return PurchaseSchema.create(model);
+    const purchase: Document<IPurchase> = await PurchaseSchema.create(model);
+
+    if (basePurchase_id) {
+      const itemsDoc = await BasePurchaseService.findItems(basePurchase_id);
+      const items: Array<Types.ObjectId> = await this.parseBasePurchaseItems(itemsDoc);
+
+      this.updateById(purchase.id, { $push: { items } });
+    }
+
+    return this.findByIdPopulated(purchase.id);
   }
 
   public async delete(model_id: string) {
@@ -41,7 +52,7 @@ class PurchaseService {
       const id = items[index];
       await this.deleteItem(model_id, id);
     }
-  
+
     return PurchaseSchema.deleteOne({ _id: model_id });
   }
 
@@ -212,6 +223,25 @@ class PurchaseService {
     purchase.depopulate('items');
 
     return purchase.toObject();
+  }
+
+  async parseBasePurchaseItems(itemsDoc: Document<IBasePurchaseItem>[]): Promise<Array<Types.ObjectId>> {
+    const items: Array<Types.ObjectId> = new Array();
+
+    for (let index in itemsDoc) {
+      const itemDoc: Document<IBasePurchaseItem> = itemsDoc[index];
+
+      const itemModel: IPurchaseItem = {
+        product: itemDoc.get('product'),
+        quantity: itemDoc.get('quantity'),
+        price: 0,
+      };
+
+      const item = await PurchaseItemSchema.create(itemModel);
+      items.push(Types.ObjectId(item.id));
+    }
+
+    return items;
   }
 }
 

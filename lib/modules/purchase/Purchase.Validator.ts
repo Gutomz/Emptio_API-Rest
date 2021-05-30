@@ -2,6 +2,7 @@ import { DuplicatedItemError, InvalidFieldError, MissingFieldError } from '../..
 import { NotAllowedError } from '../../errors/NotAllowed';
 import { PurchaseItemNotFoundError, PurchaseNotFoundError, UserNotFoundError } from '../../errors/NotFound.Error';
 import { ERROR_NAME } from '../../utils/enums';
+import BasePurchaseValidator from '../base_purchase/BasePurchase.Validator';
 import CommonValidator from '../common/Common.Validator';
 import MarketValidator from '../market/Market.Validator';
 import ProductValidator from '../product/Product.Validator';
@@ -74,9 +75,17 @@ class PurchaseValidator {
   }
 
   async validate_can_edit(purchase_id: string) {
-    if(!(await PurchaseService.canEdit(purchase_id))){
+    if (!(await PurchaseService.canEdit(purchase_id))) {
       throw new NotAllowedError('Purchase is closed');
     }
+  }
+
+  async validate_create(body: any): Promise<boolean> {
+    const { user, basePurchase_id } = body;
+
+    await BasePurchaseValidator.validate_base_purchase_exist(user.id, basePurchase_id);
+
+    return true;
   }
 
   async validate_delete(body: any, params: any): Promise<boolean> {

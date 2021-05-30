@@ -13,13 +13,15 @@ export class PurchaseController {
 
   public async create(req: Request, res: Response) {
     try {
-      const { user } = req.body;
+      await PurchaseValidator.validate_create(req.body);
+      
+      const { user, basePurchase_id } = req.body;
 
       const model: IPurchase = {
         owner: user.id,
       };
 
-      const purchase = await PurchaseService.create(model);
+      const purchase = await PurchaseService.create(model, basePurchase_id);
 
       response_success(res, purchase);
     } catch (error) {
