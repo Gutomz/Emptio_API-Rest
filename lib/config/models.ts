@@ -5,7 +5,9 @@ enum DBModels {
   MARKET = 'markets',
   PRODUCT_MARKET = 'product_markets',
   PURCHASE = 'purchases',
-  PURCHASE_ITEM = 'purchase_items'
+  PURCHASE_ITEM = 'purchase_items',
+  BASE_PURCHASE = 'base_purchases',
+  BASE_PURCHASE_ITEM = 'base_purchase_items',
 }
 
 export default DBModels;

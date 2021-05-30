@@ -9,7 +9,7 @@ const ProductSchema = new mongoose.Schema({
   },
   variation: {
     type: String,
-    required: true,
+    default: "",
   },
   weight: {
     type: MeasurementSchema,

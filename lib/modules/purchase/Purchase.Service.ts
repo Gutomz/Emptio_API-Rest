@@ -33,6 +33,15 @@ class PurchaseService {
   }
 
   public async delete(model_id: string) {
+    const _doc = await PurchaseSchema.findById(model_id);
+
+    const items = _doc.get('items');
+
+    for (var index in items) {
+      const id = items[index];
+      await this.deleteItem(model_id, id);
+    }
+  
     return PurchaseSchema.deleteOne({ _id: model_id });
   }
 

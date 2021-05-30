@@ -9,7 +9,6 @@ import PurchaseService from './Purchase.Service';
 
 class PurchaseValidator {
   validate_limit(limit: number) {
-    CommonValidator.validate_field(limit, 'limit');
     CommonValidator.validate_number(limit, 'limit');
 
     if (limit < 0) {
@@ -18,7 +17,6 @@ class PurchaseValidator {
   }
 
   validate_quantity(quantity: number) {
-    CommonValidator.validate_field(quantity, 'quantity');
     CommonValidator.validate_number(quantity, 'quantity');
 
     if (quantity < 1) {
@@ -151,7 +149,7 @@ class PurchaseValidator {
 
   async validate_find_item_by_id(body: any, params: any): Promise<boolean> {
     if (!body || !params) {
-      throw new MissingFieldError(['purchase_id', 'item:id']);
+      throw new MissingFieldError(['purchase_id', 'item_id']);
     }
 
     const { id, item_id } = params;
@@ -183,7 +181,7 @@ class PurchaseValidator {
 
   async validate_delete_item(body: any, params: any): Promise<boolean> {
     if (!body || !params) {
-      throw new MissingFieldError(['price', 'quantity']);
+      throw new MissingFieldError(['purchase_id', 'item_id']);
     }
 
     const { id, item_id } = params;

@@ -1,5 +1,6 @@
 import * as express from "express";
 import { AuthRoutes } from "./routes/Auth.Routes";
+import { BasePurchaseRoutes } from "./routes/BasePurchase.Routes";
 import { CommonRoutes } from "./routes/Commom.Routes";
 import { FriendshipRoutes } from "./routes/Friendship.Routes";
 import { MarketRoutes } from "./routes/Market.Routes";
@@ -17,6 +18,7 @@ StaticRoutes.applyRoutes(router);
 MarketRoutes.applyRoutes(router);
 ProductRoutes.applyRoutes(router);
 PurchaseRoutes.applyRoutes(router);
+BasePurchaseRoutes.applyRoutes(router);
 
 CommonRoutes.applyRoutes(router);
 

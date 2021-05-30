@@ -13,7 +13,7 @@ export interface IPurchase {
   _id?: string;
   owner: string | IUser;
   market?: string | IMarket;
-  items?: IPurchaseItem[];
+  items?: IPurchaseItem[] | string[];
   cost?: number;
   ematimatedCost?: number;
   limit?: number;
