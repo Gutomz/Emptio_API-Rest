@@ -74,18 +74,12 @@ class PurchaseService {
   public async addItem(purchase_id: string, itemModel: IPurchaseItem) {
     const item = await PurchaseItemSchema.create(itemModel);
 
-    return this.updateById(purchase_id, { $push: { items: item._id } }, {
-      new: true,
-      populate: { path: 'items', populate: { path: 'product' } }
-    });
+    return this.updateById(purchase_id, { $push: { items: item._id } });
   }
 
   public async updateItem(purchase_id: string, item_id: string, itemModel: IPurchaseItem) {
     await PurchaseItemSchema.updateOne({ _id: item_id }, itemModel);
-    return this.findOneAndUpdate({ _id: purchase_id }, {}, {
-      new: true,
-      populate: { path: 'items', populate: { path: 'product' } }
-    });
+    return this.findOneAndUpdate({ _id: purchase_id }, {});
   }
 
   public async deleteItem(purchase_id: string, item_id: string) {
@@ -99,11 +93,7 @@ class PurchaseService {
 
     await PurchaseItemSchema.deleteOne({ _id: item_id });
 
-    return this.findOneAndUpdate(query, update, {
-      new: true,
-      upsert: true,
-      populate: { path: 'items', populate: { path: 'product' } }
-    });
+    return this.findOneAndUpdate(query, update, { upsert: true });
   }
 
   public calculatePurchaseCosts(document: Document<IPurchase>) {

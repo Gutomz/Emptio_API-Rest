@@ -27,12 +27,15 @@ class PurchaseValidator {
   }
 
   validate_price(price: number) {
-    CommonValidator.validate_field(price, 'price');
     CommonValidator.validate_number(price, 'price');
 
     if (price < 0) {
       throw new InvalidFieldError('price');
     }
+  }
+
+  validate_checked(checked: boolean) {
+    CommonValidator.validate_boolean(checked, 'checked');
   }
 
   async validate_product(product: any) {
@@ -166,13 +169,14 @@ class PurchaseValidator {
     }
 
     const { id, item_id } = params;
-    const { user, quantity, price } = body;
+    const { user, quantity, price, checked } = body;
 
     await this.validate_purchase_exist(user.id, id);
     await this.validate_can_edit(id);
     await this.validate_item_exist(id, item_id);
     this.validate_quantity(quantity);
     this.validate_price(price);
+    this.validate_checked(checked);
 
     return true;
   }

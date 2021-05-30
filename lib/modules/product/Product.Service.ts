@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Document, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { formatDate } from '../../utils/date';
+import ProductMarketService from '../product_market/ProductMarket.Service';
 import { IProduct } from "./Product.Model";
 import ProductSchema from "./Product.Schema";
 
@@ -34,6 +35,27 @@ class ProductService {
 
   async find(query: FilterQuery<IProduct>, projection?: any, options?: QueryOptions): Promise<Document<IProduct>[]> {
     return ProductSchema.find(query, projection, options);
+  }
+
+  async findCorrelated(market_id: string, query: FilterQuery<IProduct>, projection?: any, options?: QueryOptions): Promise<Document<IProduct>[]> {
+    const _docs: Document<IProduct>[] = await ProductSchema.find(query, projection, options);
+
+    const products = [];
+    for(let id in _docs) {
+      const product = _docs[id];
+
+      const productMarket = await ProductMarketService.findOne({ 
+        market: market_id, 
+        product: product._id
+      });
+
+      products.push({
+        ...product.toObject(),
+        productMarket,
+      });
+    }
+
+    return products;
   }
 
   async updateById(_id: string, data: UpdateQuery<IProduct>, options: QueryOptions): Promise<Document<IProduct>> {

@@ -51,16 +51,26 @@ export class ProductController {
     try {
       const { query } = req;
       const search: string = query.search ? query.search.toString() : "";
+      const market_id: string = query.market_id ? query.market_id.toString() : "";
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
 
-      const response = await ProductService.find({
+      const filter = {
         $or: [
           { name: { $regex: search, $options: 'ix' }, },
           { variation: { $regex: search, $options: 'ix' }, },
           { tags: search, },
         ],
-      }, null, { limit, skip });
+      };
+
+      const options = { limit, skip };
+
+      let response = []
+      if(market_id) {
+        response = await ProductService.findCorrelated(market_id, filter, null, options);
+      } else {
+        response = await ProductService.find(filter, null, options);
+      }
 
       response_success(res, response);
     } catch (error) {

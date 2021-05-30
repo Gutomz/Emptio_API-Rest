@@ -51,7 +51,9 @@ class CommomValidator {
     return true;
   }
 
-  public validate_base64_url(base64url: string, fieldName: string): boolean {
+  public validate_base64_url(field: string, fieldName: string): boolean {
+    this.validate_field(field, fieldName);
+
     // TODO - validate base64url
     return true;
   }
@@ -101,6 +103,7 @@ class CommomValidator {
   }
 
   public validate_number(field: any, fieldName: string): boolean {
+    this.validate_field(field, fieldName);
     if (typeof field !== 'number')
       throw new InvalidFieldError(fieldName);
 
@@ -116,6 +119,14 @@ class CommomValidator {
     } catch (error) {
       throw new InvalidFieldError(fieldName);
     }
+  }
+
+  public validate_boolean(field: any, fieldName: string): boolean {
+    this.validate_field(field, fieldName);
+    if (typeof field !== 'boolean')
+      throw new InvalidFieldError(fieldName);
+
+    return true;
   }
 }
 

@@ -160,11 +160,12 @@ export class PurchaseController {
       await PurchaseValidator.validate_update_item(req.body, req.params);
 
       const { id, item_id } = req.params;
-      const { quantity, price } = req.body;
+      const { quantity, price, checked } = req.body;
 
       const item: IPurchaseItem = {
         price,
         quantity,
+        checked,
       };
 
       await PurchaseService.updateItem(id, item_id, item);
