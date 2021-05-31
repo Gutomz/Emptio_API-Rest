@@ -53,9 +53,8 @@ class CommomValidator {
 
   public validate_base64_url(field: string, fieldName: string): boolean {
     this.validate_field(field, fieldName);
-
-    // TODO - validate base64url
-    return true;
+    const regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    return regex.test(field);
   }
 
   public validate_location(location: string): boolean {

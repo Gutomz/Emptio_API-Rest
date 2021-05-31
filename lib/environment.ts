@@ -50,12 +50,6 @@ class Environment {
     return 'bG9jYWxob3N0';
   }
 
-  getUploadsPath(): string {
-    const path = __dirname.replace('\\dist', '').replace(/\\/g, "/");
-    const extension = '/uploads';
-    return path + extension;
-  }
-
   getApiURL(): string {
     if (this.environment === Environments.prod_environment) {
       return `http://localhost:${this.getPort()}${this.endpoint}`;

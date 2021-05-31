@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Document, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
 import { formatDate } from '../../utils/date';
 import ProductMarketService from '../product_market/ProductMarket.Service';
+import UploadService from '../upload/Upload.Service';
 import { IProduct } from "./Product.Model";
 import ProductSchema from "./Product.Schema";
 
@@ -30,6 +31,11 @@ class ProductService {
   async create(product: IProduct): Promise<Document<IProduct>> {
     product.createdAt = product.updatedAt = formatDate(moment());
     product.tags = this.formatTags(product.tags);
+    if(product.image) {
+      const { link } = await UploadService.uploadProductImage(product.image);
+      product.image = link;
+    }
+    
     return ProductSchema.create(product);
   }
 

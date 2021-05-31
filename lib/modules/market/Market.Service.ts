@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as moment from 'moment';
 import { Place } from '@googlemaps/google-maps-services-js';
 import { Document, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
@@ -6,6 +7,8 @@ import MarketSchema from './Market.Schema';
 import MapsService from '../maps/Maps.Service';
 import { formatDate } from '../../utils/date';
 import { InvalidFieldError } from '../../errors/Field.Error';
+import { getMarketLogo } from '../../utils/market_logo';
+import UploadService from '../upload/Upload.Service';
 
 class MarketService {
 
@@ -26,7 +29,7 @@ class MarketService {
   }
 
   public async create(market: IMarket): Promise<Document<IMarket>> {
-    market.createdAt = market.updatedAt = formatDate(moment());
+    market.createdAt = market.updatedAt = formatDate(moment()); 
     return MarketSchema.create(market);
   }
 
@@ -59,6 +62,15 @@ class MarketService {
     }
 
     const parsedPlace: IMarket = this.parsePlaceDataToMarket(place);
+
+    if (parsedPlace.website) {
+      const image = await getMarketLogo(parsedPlace.website);
+
+      if(image) {
+        const { link } = await UploadService.uploadMarketImage(image);
+        parsedPlace.image = link;
+      }
+    }
 
     if (!_market) {
       return this.create(parsedPlace);

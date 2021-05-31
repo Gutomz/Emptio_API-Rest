@@ -2,6 +2,7 @@ import * as express from "express";
 import * as mongoose from 'mongoose';
 
 import environment from "../environment";
+import { UploadConfig } from "./upload";
 
 export class Server {
   public app: express.Application;
@@ -13,6 +14,7 @@ export class Server {
     this.router = router;
     this.config();
     this.mongoSetup();
+    UploadConfig.init();
 
     this.app.use(environment.endpoint, router);
   }
