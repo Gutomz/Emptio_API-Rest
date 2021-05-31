@@ -69,3 +69,14 @@ export class ProductNotFoundError extends Error  implements INotFoundError {
     this.name = ERROR_NAME.NOT_FOUND;
   }
 }
+
+export class FavoriteNotFoundError extends Error  implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Favorite not found!");
+
+    this.code = ERROR_CODE.FAVORITE_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}

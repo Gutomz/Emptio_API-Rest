@@ -28,11 +28,13 @@ export enum ERROR_CODE {
   PURCHASE_NOT_FOUND = 'purchase_not_found_error',
   PURCHASE_ITEM_NOT_FOUND = 'purchase_item_not_found_error',
   PRODUCT_NOT_FOUND = 'product_not_found_error',
+  FAVORITE_NOT_FOUND = 'favorite_not_found_error',
   INVALID_FIELD = 'invalid_field_error',
   MISSING_FIELD = 'missing_field_error',
   UNIQUE_FIELD = 'unique_field_error',
   DUPLICATED_DOCUMENT = 'duplicated_document_error',
   DUPLICATED_ITEM = 'duplicated_item_error',
+  DUPLICATED_FAVORITE = 'duplicated_favorite_error',
 }
 
 export enum FRIENDSHIP_STATUS {
