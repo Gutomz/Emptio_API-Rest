@@ -80,6 +80,12 @@ class UserValidator {
 
     return true;
   }
+
+  async validate_update_pushToken({ pushToken }): Promise<boolean> {
+    CommonValidator.validate_field(pushToken, 'pushToken');
+
+    return true;
+  }
 }
 
 export default new UserValidator();

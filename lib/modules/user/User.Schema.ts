@@ -7,6 +7,10 @@ const ConfigurationSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  pushToken: {
+    type: String,
+    default: '',
+  },
 });
 
 const UserSchema = new mongoose.Schema({

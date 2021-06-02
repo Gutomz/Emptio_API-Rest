@@ -52,6 +52,10 @@ class FavoritesService {
       { path: 'markets' },
     ]);
   }
+
+  public async find(filter: FilterQuery<IFavorites>, projection?: any, options?: QueryOptions) {
+    return FavoritesSchema.find(filter, projection, options);
+  }
 }
 
 export default new FavoritesService();

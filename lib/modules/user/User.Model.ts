@@ -1,7 +1,8 @@
 import { ILocation } from "../common/Common.Models";
 
 export interface IUserConfigurations {
-  canNotify: boolean,
+  canNotify: boolean;
+  pushToken: string;
 }
 
 export interface IUser {
@@ -12,8 +13,8 @@ export interface IUser {
   photo?: string;
   description?: string;
   configurations?: IUserConfigurations;
-  recoveryCode?: string,
-  location: ILocation,
-  createdAt: string,
-  updatedAt: string,
+  recoveryCode?: string;
+  location: ILocation;
+  createdAt: string;
+  updatedAt: string;
 }

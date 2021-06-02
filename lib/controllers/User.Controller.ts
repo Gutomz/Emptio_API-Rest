@@ -15,6 +15,7 @@ import MailService from '../modules/mail/Mail.Service';
 import { formatDate } from '../utils/date';
 import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
 import { parseLocation } from '../utils/string';
+import NotificationService from '../modules/notification/Notification.Service';
 
 export class UserController {
   public async register(req: Request, res: Response) {
@@ -149,7 +150,12 @@ export class UserController {
     try {
       const { user } = req.body;
 
-      response_success(res, user);
+      const notificationCount = await NotificationService.count({
+        owner: user.id,
+        viewed: false,
+      });
+
+      response_success(res, { ...user, notificationCount });
     } catch (error) {
       response_handleError(res, error);
     }
@@ -205,7 +211,28 @@ export class UserController {
 
       const location = parseLocation(_location);
 
-      const response = await UserService.updateById(user.id, { location }, { new: true, projection: "+location +configurations" });
+      const response = await UserService.updateById(
+        user.id, { location }, 
+        { new: true, projection: "+location +configurations" }
+      );
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async updatePushToken(req: Request, res: Response) {
+    try {
+      await UserValidator.validate_update_pushToken(req.body);
+
+      const { user, pushToken } = req.body;
+
+      const response = await UserService.updateById(
+        user.id, 
+        { 'configurations.pushToken': pushToken }, 
+        { new: true, projection: "+location +configurations" }
+      );
 
       response_success(res, response);
     } catch (error) {

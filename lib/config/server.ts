@@ -2,6 +2,7 @@ import * as express from "express";
 import * as mongoose from 'mongoose';
 
 import environment from "../environment";
+import { FirebaseConfig } from "./firebase";
 import { UploadConfig } from "./upload";
 
 export class Server {
@@ -15,6 +16,7 @@ export class Server {
     this.config();
     this.mongoSetup();
     UploadConfig.init();
+    FirebaseConfig.init();
 
     this.app.use(environment.endpoint, router);
   }

@@ -78,6 +78,10 @@ class MarketService {
 
     return this.updateById(_market.id, parsedPlace, { new: true });
   }
+
+  async findById(product_id: string, projection?: any, options?: QueryOptions) {
+    return MarketSchema.findById(product_id, projection, options);
+  }
 }
 
 export default new MarketService();

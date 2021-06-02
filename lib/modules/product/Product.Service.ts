@@ -52,7 +52,7 @@ class ProductService {
 
       const productMarket = await ProductMarketService.findOne({ 
         market: market_id, 
-        product: product._id
+        product: product.id
       });
 
       products.push({
@@ -72,6 +72,10 @@ class ProductService {
     };
 
     return ProductSchema.findByIdAndUpdate(_id, _data, options);
+  }
+
+  async findById(_id: string, projection?: any, options?: QueryOptions): Promise<Document<IProduct>> {
+    return ProductSchema.findById(_id, projection, options);
   }
 }
 

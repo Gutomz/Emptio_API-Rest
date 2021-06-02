@@ -38,5 +38,8 @@ export class UserRoutes {
 
     // * Update Location
     router.patch(this.getFullPath('/location'), authMiddleware, this.controller.updateLocation);
+
+    // * Update PushToken
+    router.patch(this.getFullPath('/pushToken'), authMiddleware, this.controller.updatePushToken);
   }
 }

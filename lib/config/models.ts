@@ -9,6 +9,7 @@ enum DBModels {
   BASE_PURCHASE = 'base_purchases',
   BASE_PURCHASE_ITEM = 'base_purchase_items',
   FAVORITES = 'favorites',
+  NOTIFICATION = 'notifications',
 }
 
 export default DBModels;
