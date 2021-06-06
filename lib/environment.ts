@@ -35,7 +35,7 @@ class Environment {
       return 'mongodb://localhost/';
     }
 
-    return 'mongodb://localhost/data';
+    return 'mongodb://localhost/emptio-dev';
   }
 
   getPrivateKey(): string {

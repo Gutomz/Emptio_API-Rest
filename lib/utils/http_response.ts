@@ -69,6 +69,7 @@ export function response_fieldValidationError(res: Response, error: any) {
   response_badRequestError(res, {
     message: error.message,
     fields: error.fields,
+    code: error.code,
   }, error);
 }
 
@@ -76,12 +77,14 @@ export function response_duplicatedDocumentError(res: Response, error: any) {
   response_badRequestError(res, {
     message: error.message,
     documentType: error.documentType,
+    code: error.code,
   }, error);
 }
 
 export function response_notFoundError(res: Response, error: any) {
   response_badRequestError(res, {
     message: error.message,
+    code: error.code,
   }, error);
 }
 

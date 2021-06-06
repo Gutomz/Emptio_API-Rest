@@ -33,7 +33,7 @@ class UploadService {
   }
 
   private generateLink(filename: string, extension: string = "") {
-    return this.baseLink + extension + '/' + filename;
+    return extension + '/' + filename;
   }
 
   private parsePathFromLink(link: string): string {

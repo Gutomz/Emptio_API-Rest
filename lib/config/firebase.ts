@@ -5,7 +5,7 @@ export class FirebaseConfig {
 
   static init() {
     firebase.initializeApp({
-      credential: this._serviceAccount,
+      credential: firebase.credential.cert(this._serviceAccount),
     });
   }
 }
