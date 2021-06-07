@@ -31,7 +31,7 @@ export class AuthController {
 
       await UserService.findById(userId);
 
-      response_success(res);
+      response_success(res, { ok: true });
     } catch (error) {
       response_handleError(res, error);
     }

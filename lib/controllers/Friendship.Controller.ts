@@ -44,7 +44,7 @@ export class FriendshipController {
         await FriendshipService.delete({ _id: id });
       }
 
-      response_success(res);
+      response_success(res, { ok: true });
     } catch (error) {
       response_handleError(res, error);
     }

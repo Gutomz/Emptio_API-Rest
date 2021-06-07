@@ -79,7 +79,7 @@ class UserService {
     const user = await UserSchema.findOne({ email, recoveryCode });
 
     if (!user) {
-      throw new InvalidFieldError(['email', 'recoveryCode']);
+      throw new UserNotFoundError();
     }
 
     return true;

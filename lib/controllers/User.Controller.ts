@@ -68,7 +68,7 @@ export class UserController {
 
       await MailService.forgotPassword({ email, code });
 
-      response_success(res);
+      response_success(res, { ok: true });
     } catch (error) {
       response_handleError(res, error);
     }
@@ -106,7 +106,7 @@ export class UserController {
 
       await UserService.updateById(user._id, data);
 
-      response_success(res);
+      response_success(res, { ok: true });
     } catch (error) {
       response_handleError(res, error);
     }
