@@ -27,9 +27,9 @@ export class AuthController {
 
   public async logout(req: Request, res: Response) {
     try {
-      const { userId } = req.body;
+      const { user } = req.body;
 
-      await UserService.findById(userId);
+      await UserService.updateById(user.id, { 'configurations.pushToken': "" });
 
       response_success(res, { ok: true });
     } catch (error) {

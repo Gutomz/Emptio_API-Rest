@@ -38,7 +38,7 @@ class NotificationService {
   }
 
   async count(filter: FilterQuery<INotification>) {
-    return NotificationSchema.count(filter);
+    return NotificationSchema.countDocuments(filter);
   }
 }
 

@@ -155,7 +155,7 @@ export class UserController {
         viewed: false,
       });
 
-      response_success(res, { ...user, notificationCount });
+      response_success(res, { ...user.toObject(), notificationCount });
     } catch (error) {
       response_handleError(res, error);
     }

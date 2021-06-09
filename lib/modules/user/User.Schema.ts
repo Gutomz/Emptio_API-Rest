@@ -39,6 +39,7 @@ const UserSchema = new mongoose.Schema({
   configurations: {
     type: ConfigurationSchema,
     select: false,
+    default: () => ({}),
   },
   recoveryCode: {
     type: String,

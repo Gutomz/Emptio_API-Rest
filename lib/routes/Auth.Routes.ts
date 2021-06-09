@@ -16,9 +16,9 @@ export class AuthRoutes {
     router.post(this.getFullPath(), this.controller.login);
 
     // * Logout
-    router.post(this.getFullPath('/logout'), authMiddleware, this.controller.logout);
+    router.delete(this.getFullPath(), authMiddleware, this.controller.logout);
 
     // * Refresh
-    router.post(this.getFullPath('/refresh'), refreshAuthMiddleware, this.controller.refresh);
+    router.put(this.getFullPath(), refreshAuthMiddleware, this.controller.refresh);
   }
 }
