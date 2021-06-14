@@ -1,20 +1,21 @@
 import { Request, Response } from 'express';
+import { QueryOptions } from 'mongoose';
 import { IProduct } from '../modules/product/Product.Model';
 import ProductService from '../modules/product/Product.Service';
 import { IPurchase, IPurchaseItem } from '../modules/purchase/Purchase.Model';
 import PurchaseService from '../modules/purchase/Purchase.Service';
 import PurchaseValidator from '../modules/purchase/Purchase.Validator';
-
 import {
-  response_handleError, response_success,
+  response_handleError, response_success
 } from '../utils/http_response';
+
 
 export class PurchaseController {
 
   public async create(req: Request, res: Response) {
     try {
       await PurchaseValidator.validate_create(req.body);
-      
+
       const { user, basePurchase_id } = req.body;
 
       const model: IPurchase = {
@@ -36,13 +37,22 @@ export class PurchaseController {
       const status: string = query.status ? query.status.toString() : "";
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+      const orderBy: string = query.orderBy ? query.orderBy.toString() : "";
+      const isDesc: boolean = query.isDesc ? query.isDesc.toString().includes('true') : false;
 
       const { user } = body;
+
+      const order = isDesc ? -1 : 1;
+      const searchQuery: QueryOptions = {
+        limit,
+        skip,
+        sort: orderBy.includes("updatedAt") ? { updatedAt: order } : { createdAt: order },
+      };
 
       const response = await PurchaseService.findPopulated({
         owner: user.id,
         status: { $regex: status, $options: 'ix' },
-      }, null, { limit, skip });
+      }, null, searchQuery);
 
       response_success(res, response);
     } catch (error) {

@@ -83,7 +83,8 @@ class PurchaseValidator {
   async validate_create(body: any): Promise<boolean> {
     const { user, basePurchase_id } = body;
 
-    await BasePurchaseValidator.validate_base_purchase_exist(user.id, basePurchase_id);
+    if (basePurchase_id)
+      await BasePurchaseValidator.validate_base_purchase_exist(user.id, basePurchase_id);
 
     return true;
   }
