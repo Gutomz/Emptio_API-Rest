@@ -189,8 +189,8 @@ class PurchaseService {
     };
   }
 
-  async connectMarket(purchase_id: string, market_id: string) {
-    // TODO - Change market will change items price?
+  async connectMarket(purchase_id: string, market_id?: string) {
+    // ? TODO - Change market will change items price?
     return this.findByIdAndUpdate(purchase_id, { market: market_id });
   }
 

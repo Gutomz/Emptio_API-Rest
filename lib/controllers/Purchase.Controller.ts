@@ -112,7 +112,7 @@ export class PurchaseController {
       const { id } = req.params;
       const { market_id } = req.body;
 
-      await PurchaseService.connectMarket(id, market_id);
+      await PurchaseService.connectMarket(id, market_id || null);
 
       const response = await PurchaseService.findByIdPopulated(id);
 

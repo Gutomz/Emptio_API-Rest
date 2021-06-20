@@ -55,9 +55,11 @@ class PurchaseValidator {
     }
   }
 
-  async validate_market_id(market_id: string) {
+  async validate_market_id(purchase_id: string, market_id: string) {
     CommonValidator.validate_object_id(market_id, 'market_id');
-    await MarketValidator.validate_market_exist(market_id);
+    if (!(await PurchaseService.exist({ _id: purchase_id, market: market_id }))) {
+      await MarketValidator.validate_market_exist(market_id);
+    } else throw new InvalidFieldError("market_id");
   }
 
   async validate_purchase_exist(owner_id: string, purchase_id: string) {
@@ -129,7 +131,7 @@ class PurchaseValidator {
 
     await this.validate_purchase_exist(user.id, id);
     await this.validate_can_edit(id);
-    await this.validate_market_id(market_id);
+    if (market_id) await this.validate_market_id(id, market_id);
 
     return true;
   }

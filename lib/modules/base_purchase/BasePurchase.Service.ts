@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { FilterQuery, QueryOptions, UpdateQuery, UpdateWithAggregationPipeline, Document, Types } from 'mongoose';
+import { Document, FilterQuery, QueryOptions, Types, UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 import { formatDate } from "../../utils/date";
 import { IBasePurchase, IBasePurchaseItem } from "./BasePurchase.Model";
 import BasePurchaseSchema, { BasePurchaseItemSchema } from "./BasePurchase.Schema";
@@ -35,6 +35,10 @@ class BasePurchaseService {
     };
 
     return BasePurchaseSchema.findByIdAndUpdate(id, _data, options);
+  }
+
+  public async findOne(query?: FilterQuery<IBasePurchase>, projection?: any, options?: QueryOptions): Promise<Document<IBasePurchase>> {
+    return BasePurchaseSchema.findOne(query, projection, options);
   }
 
   public async findOneAndUpdate(filter: FilterQuery<IBasePurchase>, data: UpdateWithAggregationPipeline | UpdateQuery<IBasePurchase>, options?: QueryOptions) {
