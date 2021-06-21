@@ -3,6 +3,10 @@ import DBModels from '../../config/models';
 import { MeasurementSchema } from '../common/Common.Schemas';
 
 const ProductSchema = new mongoose.Schema({
+  brand: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -34,6 +38,7 @@ const ProductSchema = new mongoose.Schema({
 });
 
 ProductSchema.index({
+  brand: 'text',
   name: 'text',
   variation: 'text',
   tags: 'text',

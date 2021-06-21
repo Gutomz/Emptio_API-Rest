@@ -9,11 +9,12 @@ import ProductSchema from "./Product.Schema";
 class ProductService {
   private formatTags(tags: string[]): string[] {
     if(!tags) return [];
-    return tags.map(tag => tag.toLowerCase().replace(/ /g, '-'));
+    return tags.map(tag => tag.trim().toLowerCase().replace(/ /g, '-'));
   }
 
   public productModel(product: any): IProduct {
     const _return: IProduct = {
+      brand: product.brand,
       name: product.name,
       variation: product.variation,
       weight: product.weight,

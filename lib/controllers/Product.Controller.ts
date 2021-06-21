@@ -12,9 +12,10 @@ export class ProductController {
     try {
       await ProductValidator.validate_create(req.body);
 
-      const { name, variation, weight, tags } = req.body;
+      const { brand, name, variation, weight, tags } = req.body;
 
       const product: IProduct = {
+        brand,
         name,
         variation,
         weight,
@@ -78,6 +79,7 @@ export class ProductController {
       const filter = {
         _id: { $nin: excludeList },
         $or: [
+          { brand: { $regex: search, $options: 'ix' }, },
           { name: { $regex: search, $options: 'ix' }, },
           { variation: { $regex: search, $options: 'ix' }, },
           { tags: { $regex: search, $options: 'ix' }, },

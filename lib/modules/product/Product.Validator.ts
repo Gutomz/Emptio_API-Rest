@@ -13,7 +13,8 @@ class ProductValidator {
     }
   }
 
-  async validate_create({ name, variation, weight, tags }) {
+  async validate_create({ brand, name, variation, weight, tags }) {
+    CommonValidator.validate_field(brand, 'brand');
     CommonValidator.validate_field(name, 'name');
     variation && CommonValidator.validate_field(variation, 'variation');
     CommonValidator.validate_measurement(weight, 'weight');
