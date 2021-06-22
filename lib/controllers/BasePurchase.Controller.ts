@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { QueryOptions } from 'mongoose';
 import { IBasePurchase, IBasePurchaseItem } from '../modules/base_purchase/BasePurchase.Model';
 import BasePurchaseService from '../modules/base_purchase/BasePurchase.Service';
 import BasePurchaseValidator from '../modules/base_purchase/BasePurchase.Validator';
@@ -48,13 +49,22 @@ export class BasePurchaseController {
       const search: string = query.search ? query.search.toString() : "";
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+      const orderBy: string = query.orderBy ? query.orderBy.toString() : "";
+      const isDesc: boolean = query.isDesc ? query.isDesc.toString().includes('true') : false;
 
       const { user } = body;
+
+      const order = isDesc ? -1 : 1;
+      const searchQuery: QueryOptions = {
+        limit,
+        skip,
+        sort: orderBy.includes("updatedAt") ? { updatedAt: order } : { createdAt: order },
+      };
 
       const response = await BasePurchaseService.findPopulated({
         owner: user.id,
         name: { $regex: search, $options: 'ix' },
-      }, null, { limit, skip });
+      }, null, searchQuery);
 
       response_success(res, response);
     } catch (error) {

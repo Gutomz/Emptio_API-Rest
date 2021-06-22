@@ -63,16 +63,20 @@ export class ProductController {
 
       if (purchase_id) {
         const purchase = await PurchaseService.findOne({ _id: purchase_id }, null, { populate: "items" });
-        market_id = purchase.get('market');
-        var items = purchase.get('items');
-        for (let index in items) {
-          excludeList.push(items[index].product);
+        if (purchase != null) {
+          market_id = purchase.get('market');
+          var items = purchase.get('items');
+          for (let index in items) {
+            excludeList.push(items[index].product);
+          }
         }
       } else if (basePurchase_id) {
         const basePurchase = await BasePurchaseService.findOne({ _id: basePurchase_id }, null, { populate: "items" });
-        var items = basePurchase.get('items');
-        for (let index in items) {
-          excludeList.push(items[index].product);
+        if (basePurchase != null) {
+          var items = basePurchase.get('items');
+          for (let index in items) {
+            excludeList.push(items[index].product);
+          }
         }
       }
 
