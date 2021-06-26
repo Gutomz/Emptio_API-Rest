@@ -11,6 +11,7 @@ class BasePurchaseService {
   }
 
   async create(model: IBasePurchase) {
+    model.name = `Lista ${1 + (await this.count({ owner: model.owner }))}`;
     model.createdAt = model.updatedAt = formatDate(moment());
     return BasePurchaseSchema.create(model);
   }
@@ -100,6 +101,10 @@ class BasePurchaseService {
     const _doc = await this.findByIdPopulated(basePurchase_id);
     const items: Document<IBasePurchaseItem>[] = _doc.get('items');
     return items;
+  }
+
+  async count(filter: FilterQuery<IBasePurchase>) {
+    return BasePurchaseSchema.countDocuments(filter);
   }
 }
 

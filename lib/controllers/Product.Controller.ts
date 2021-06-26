@@ -54,7 +54,7 @@ export class ProductController {
       const { query } = req;
       const search: string = query.search ? query.search.toString().toLowerCase() : "";
       const purchase_id: string = query.purchase_id ? query.purchase_id.toString() : "";
-      const basePurchase_id: string = query.purchase_id ? query.purchase_id.toString() : "";
+      const basePurchase_id: string = query.basePurchase_id ? query.basePurchase_id.toString() : "";
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
 
