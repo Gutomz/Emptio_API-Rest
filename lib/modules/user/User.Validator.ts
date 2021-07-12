@@ -1,10 +1,10 @@
 import { MissingFieldError } from '../../errors/Field.Error';
 import { UserNotFoundError } from '../../errors/NotFound.Error';
-import UserService from './User.Service';
 import CommonValidator from '../common/Common.Validator';
+import UserService from './User.Service';
 
 class UserValidator {
-  validate_register(params: { name, email, password, location, photo? }): boolean {
+  validate_register(params: { name, email, password, location, photo?}): boolean {
     if (!params) {
       throw new MissingFieldError(['name', 'email', 'password', 'location']);
     }
@@ -40,7 +40,7 @@ class UserValidator {
 
     await UserService.validatePassword(
       { _id: user._id }, actualPassword, passwordCompare, 'actualPassword');
-      
+
     return true;
   }
 

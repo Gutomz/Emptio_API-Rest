@@ -41,5 +41,8 @@ export class UserRoutes {
 
     // * Update PushToken
     router.patch(this.getFullPath('/pushToken'), authMiddleware, this.controller.updatePushToken);
+
+    // * Get Profile
+    router.get(this.getFullPath('/profile/:id'), authMiddleware, this.controller.getProfile);
   }
 }

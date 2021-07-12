@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { FilterQuery, QueryOptions, Document } from 'mongoose';
+import { Document, FilterQuery, QueryOptions } from 'mongoose';
 import { formatDate } from '../../utils/date';
 import { IFriendship } from './Friendship.Model';
 import FriendshipSchema from './Friendship.Schema';
@@ -39,6 +39,18 @@ class FriendshipService {
 
   public async delete(query: FilterQuery<IFriendship>, options?: QueryOptions) {
     return FriendshipSchema.deleteOne(query, options);
+  }
+
+  public async getDocumentCount(filter?: FilterQuery<IFriendship>) {
+    return FriendshipSchema.countDocuments(filter);
+  }
+
+  public async getFollowersCount(id: string) {
+    return this.getDocumentCount({ friend: id });
+  }
+
+  public async getFollowingCount(id: string) {
+    return this.getDocumentCount({ owner: id });
   }
 }
 

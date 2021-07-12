@@ -1,21 +1,22 @@
-import * as moment from 'moment';
 import * as bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-
-import {
-  response_handleError,
-  response_success,
-} from '../utils/http_response';
+import * as moment from 'moment';
+import { UniqueFieldError } from '../errors/Field.Error';
+import AuthService from '../modules/auth/Auth.Service';
+import FriendshipService from '../modules/friendship/Friendship.Service';
+import MailService from '../modules/mail/Mail.Service';
+import NotificationService from '../modules/notification/Notification.Service';
+import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
 import { IUser } from '../modules/user/User.Model';
 import UserService from '../modules/user/User.Service';
 import UserValidator from '../modules/user/User.Validator';
-import { UniqueFieldError } from '../errors/Field.Error';
-import AuthService from '../modules/auth/Auth.Service';
-import MailService from '../modules/mail/Mail.Service';
 import { formatDate } from '../utils/date';
-import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
+import {
+  response_handleError,
+  response_success
+} from '../utils/http_response';
 import { parseLocation } from '../utils/string';
-import NotificationService from '../modules/notification/Notification.Service';
+
 
 export class UserController {
   public async register(req: Request, res: Response) {
@@ -212,7 +213,7 @@ export class UserController {
       const location = parseLocation(_location);
 
       const response = await UserService.updateById(
-        user.id, { location }, 
+        user.id, { location },
         { new: true, projection: "+location +configurations" }
       );
 
@@ -229,12 +230,39 @@ export class UserController {
       const { user, pushToken } = req.body;
 
       const response = await UserService.updateById(
-        user.id, 
-        { 'configurations.pushToken': pushToken }, 
+        user.id,
+        { 'configurations.pushToken': pushToken },
         { new: true, projection: "+location +configurations" }
       );
 
       response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async getProfile(req: Request, res: Response) {
+    try {
+      const { user } = req.body;
+      const { id } = req.params;
+
+      const responseUser = await UserService.findById(id);
+      const followersCount = await FriendshipService.getFollowersCount(id);
+      const followingCount = await FriendshipService.getFollowingCount(id);
+      const isMe = user.id == id;
+      const isFollowing = !isMe && await FriendshipService.exist({ owner: user.id, friend: id });
+
+      const response = {
+        user: responseUser,
+        followersCount,
+        followingCount,
+        postsCount: 0,
+        isMe,
+        isFollowing,
+      };
+
+      response_success(res, response);
+
     } catch (error) {
       response_handleError(res, error);
     }

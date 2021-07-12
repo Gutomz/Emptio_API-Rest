@@ -1,8 +1,8 @@
-import { Document } from 'mongoose';
 import * as base64ToImage from 'base64-to-image';
 import * as fs from 'fs';
-import environment from "../../environment";
+import { Document } from 'mongoose';
 import { UploadConfig } from '../../config/upload';
+import environment from "../../environment";
 
 interface IUploadFileResponse {
   imageType: string;
@@ -33,12 +33,12 @@ class UploadService {
   }
 
   private generateLink(filename: string, extension: string = "") {
-    return environment.static +  extension + '/' + filename;
+    return environment.static + extension + '/' + filename;
   }
 
   private parsePathFromLink(link: string): string {
-    const parsed = link.replace(this.baseLink, "");
-    return this.getFullUploadsPath(parsed);
+    const parsed = link.replace(this.baseLink, "").replace(environment.static, "");
+    return this.uploadsFolder + parsed;
   }
 
   private uploadFile(data: string, document: Document, pathExtension?: string): IUploadFileResponse {
@@ -76,7 +76,6 @@ class UploadService {
 
   public async deleteLink(link: string) {
     const path = this.parsePathFromLink(link);
-
     fs.unlinkSync(path);
   }
 }

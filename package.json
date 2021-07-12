@@ -5,8 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "watch-tsc": "tsc -w",
-    "start": "nodemon ./dist/index.js",
-    "local": "concurrently \"npm:watch-tsc\" \"npm:start\"",
+    "start": "tsc && node ./dist/index.js",
+    "local": "concurrently \"npm:watch-tsc\" \"nodemon ./dist/index.js\"",
     "test": "ts-node ./lib/index.ts"
   },
   "author": "Augusto Moço Zambello",

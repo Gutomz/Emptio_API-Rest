@@ -1,9 +1,9 @@
-import { Response, Request, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { VerifyOptions } from 'jsonwebtoken';
-import { response_handleError } from '../utils/http_response';
 import { UnauthorizedError } from '../errors/Unauthorized.Error';
 import AuthService from '../modules/auth/Auth.Service';
 import UserService from '../modules/user/User.Service';
+import { response_handleError } from '../utils/http_response';
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
@@ -41,7 +41,7 @@ export async function refreshAuthMiddleware(req: Request, res: Response, next: N
   try {
     const { refreshToken } = req.body;
 
-    if(!refreshToken) throw new UnauthorizedError
+    if (!refreshToken) throw new UnauthorizedError
 
     const options: VerifyOptions = {
       complete: true,
