@@ -38,6 +38,7 @@ export enum ERROR_CODE {
 }
 
 export enum FRIENDSHIP_STATUS {
+  NONE = 'none',
   ACCEPTED = 'accepted',
   DECLINED = 'declined',
   PENDING = 'pending',

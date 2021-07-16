@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import * as moment from 'moment';
-
-import { response_success, response_handleError } from '../utils/http_response';
-import FriendshipValidator from '../modules/friendship/Friendship.Validator';
+import { FilterQuery } from 'mongoose';
+import { FriendshipNotFoundError } from '../errors/NotFound.Error';
+import { IFriendship } from '../modules/friendship/Friendship.Model';
 import FriendshipService from '../modules/friendship/Friendship.Service';
+import FriendshipValidator from '../modules/friendship/Friendship.Validator';
 import { formatDate } from '../utils/date';
 import { FRIENDSHIP_STATUS } from '../utils/enums';
-import { FriendshipNotFoundError } from '../errors/NotFound.Error';
+import { response_handleError, response_success } from '../utils/http_response';
+
 
 export class FriendshipController {
 
@@ -59,11 +61,7 @@ export class FriendshipController {
         status: FRIENDSHIP_STATUS.PENDING,
       });
 
-      const data = {
-        data: requests,
-      };
-
-      response_success(res, data);
+      response_success(res, requests);
     } catch (error) {
       response_handleError(res, error);
     }
@@ -71,16 +69,15 @@ export class FriendshipController {
 
   public async get(req: Request, res: Response) {
     try {
-      const { user } = req.body;
+      const { query, body } = req;
+      const { user } = body;
 
-      const requests = await FriendshipService.find({
-        owner: user.id,
-        status: FRIENDSHIP_STATUS.ACCEPTED,
-      });
+      const userId: string = query.userId ? query.userId.toString() : user.id;
+      const followers: boolean = query.followers ? query.followers.toString().includes('true') : false;
 
-      const data = {
-        data: requests,
-      };
+      let data;
+      if (followers) data = await FriendshipService.getFollowers(userId);
+      else data = await FriendshipService.getFollowing(userId);
 
       response_success(res, data);
     } catch (error) {
@@ -105,7 +102,7 @@ export class FriendshipController {
         ],
       });
 
-      if(data.ok !== 1 || !data.deletedCount) {
+      if (data.ok !== 1 || !data.deletedCount) {
         throw new FriendshipNotFoundError();
       }
 

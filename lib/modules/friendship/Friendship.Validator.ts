@@ -1,4 +1,5 @@
 import { DuplicatedDocumentError } from '../../errors/DuplicatedModel.Error';
+import { InvalidFieldError } from '../../errors/Field.Error';
 import { FriendshipNotFoundError } from '../../errors/NotFound.Error';
 import { FRIENDSHIP_STATUS } from '../../utils/enums';
 import CommomValidator from '../common/Common.Validator';
@@ -10,6 +11,10 @@ class UserValidator {
     CommomValidator.validate_field(friendId, 'friendId');
 
     await UserService.findById(friendId);
+
+    if (friendId == user.id) {
+      throw new InvalidFieldError('friendId');
+    }
 
     if (await FriendshipService.exist({ friend: friendId, owner: user.id })) {
       throw new DuplicatedDocumentError('Friendship');
@@ -30,7 +35,7 @@ class UserValidator {
       friend: user.id,
     });
 
-    if(!friendship) {
+    if (!friendship) {
       throw new FriendshipNotFoundError();
     }
 

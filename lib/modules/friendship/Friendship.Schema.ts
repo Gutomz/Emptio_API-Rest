@@ -7,13 +7,13 @@ const FriendshipSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
     select: false,
-    ref: 'User',
+    ref: DBModels.USER,
   },
   friend: {
     type: mongoose.Types.ObjectId,
     required: true,
     select: false,
-    ref: 'User',
+    ref: DBModels.USER,
   },
   status: {
     type: String,

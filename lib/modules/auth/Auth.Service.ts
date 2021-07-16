@@ -22,7 +22,7 @@ class AuthService {
     };
 
     const options = {
-      expiresIn: '7d',
+      // expiresIn: '7d',
     };
 
     return this.generateToken(data, options);

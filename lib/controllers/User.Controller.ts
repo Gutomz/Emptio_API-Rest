@@ -11,6 +11,7 @@ import { IUser } from '../modules/user/User.Model';
 import UserService from '../modules/user/User.Service';
 import UserValidator from '../modules/user/User.Validator';
 import { formatDate } from '../utils/date';
+import { FRIENDSHIP_STATUS } from '../utils/enums';
 import {
   response_handleError,
   response_success
@@ -250,7 +251,9 @@ export class UserController {
       const followersCount = await FriendshipService.getFollowersCount(id);
       const followingCount = await FriendshipService.getFollowingCount(id);
       const isMe = user.id == id;
-      const isFollowing = !isMe && await FriendshipService.exist({ owner: user.id, friend: id });
+      const friendship = !isMe && await FriendshipService.findOne({ owner: user.id, friend: id });
+      const status = friendship ? friendship.get('status') : FRIENDSHIP_STATUS.NONE;
+      const isFollowing = friendship != null && FRIENDSHIP_STATUS.ACCEPTED.includes(status);
 
       const response = {
         user: responseUser,
@@ -259,10 +262,10 @@ export class UserController {
         postsCount: 0,
         isMe,
         isFollowing,
+        friendshipStatus: status,
       };
 
       response_success(res, response);
-
     } catch (error) {
       response_handleError(res, error);
     }

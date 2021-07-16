@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Document, FilterQuery, QueryOptions } from 'mongoose';
 import { formatDate } from '../../utils/date';
+import { FRIENDSHIP_STATUS } from '../../utils/enums';
 import { IFriendship } from './Friendship.Model';
 import FriendshipSchema from './Friendship.Schema';
 
@@ -45,12 +46,56 @@ class FriendshipService {
     return FriendshipSchema.countDocuments(filter);
   }
 
+  public async getFollowers(userId: string) {
+    const followingList = await this.getFollowing(userId);
+
+    const friendships = await FriendshipSchema.find({ friend: userId, status: FRIENDSHIP_STATUS.ACCEPTED }).populate([
+      {
+        path: 'owner',
+        select: ['name', 'email', 'photo'],
+      }
+    ]);
+
+    const followers = [];
+    for (var index in friendships) {
+      const friendship = friendships[index];
+      const owner = friendship.get('owner');
+      const secondWayFriendship = await this.findOne({ owner: userId, friend: owner.id });
+      followers.push({
+        _id: friendship.id,
+        user: owner,
+        isFollowing: !!(followingList.find((followingObj) => followingObj.user.id == owner.id)),
+        followingStatus: secondWayFriendship ? secondWayFriendship.get('status') : FRIENDSHIP_STATUS.NONE,
+      });
+    }
+
+    return followers;
+  }
+
+  public async getFollowing(userId: string) {
+    const friendships = await FriendshipSchema.find({ owner: userId, status: FRIENDSHIP_STATUS.ACCEPTED }).populate([
+      {
+        path: 'friend',
+        select: ['name', 'email', 'photo'],
+      }
+    ]);
+
+    const followingList = friendships.map((friendship) => ({
+      _id: friendship.id,
+      user: friendship.get('friend'),
+      isFollowing: true,
+      followingStatus: friendship.get('status'),
+    }));
+
+    return followingList;
+  }
+
   public async getFollowersCount(id: string) {
-    return this.getDocumentCount({ friend: id });
+    return this.getDocumentCount({ friend: id, status: FRIENDSHIP_STATUS.ACCEPTED });
   }
 
   public async getFollowingCount(id: string) {
-    return this.getDocumentCount({ owner: id });
+    return this.getDocumentCount({ owner: id, status: FRIENDSHIP_STATUS.ACCEPTED });
   }
 }
 
