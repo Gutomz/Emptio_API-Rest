@@ -60,12 +60,13 @@ class FriendshipService {
     for (var index in friendships) {
       const friendship = friendships[index];
       const owner = friendship.get('owner');
-      const secondWayFriendship = await this.findOne({ owner: userId, friend: owner.id });
+      const followBackFriendship = await this.findOne({ owner: userId, friend: owner.id });
       followers.push({
         _id: friendship.id,
         user: owner,
         isFollowing: !!(followingList.find((followingObj) => followingObj.user.id == owner.id)),
-        followingStatus: secondWayFriendship ? secondWayFriendship.get('status') : FRIENDSHIP_STATUS.NONE,
+        followingStatus: followBackFriendship ? followBackFriendship.get('status') : FRIENDSHIP_STATUS.NONE,
+        followingRequestId: followBackFriendship ? followBackFriendship.id : null,
       });
     }
 
@@ -88,6 +89,26 @@ class FriendshipService {
     }));
 
     return followingList;
+  }
+
+  public async getRequests(userId: string) {
+    const friendships = await FriendshipSchema.find({ friend: userId, status: FRIENDSHIP_STATUS.PENDING })
+      .populate([
+        {
+          path: 'owner',
+          select: ['name', 'email', 'photo'],
+        }
+      ]);
+
+    const requests = friendships.map((friendship) => ({
+      _id: friendship.id,
+      user: friendship.get('owner'),
+      status: friendship.get('status'),
+      createdAt: friendship.get('createdAt'),
+      updatedAt: friendship.get('updatedAt'),
+    }));
+
+    return requests;
   }
 
   public async getFollowersCount(id: string) {

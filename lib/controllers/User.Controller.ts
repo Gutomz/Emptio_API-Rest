@@ -263,6 +263,7 @@ export class UserController {
         isMe,
         isFollowing,
         friendshipStatus: status,
+        friendshipId: friendship ? friendship.id : null,
       };
 
       response_success(res, response);

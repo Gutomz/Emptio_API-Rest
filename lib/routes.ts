@@ -5,6 +5,7 @@ import { CommonRoutes } from "./routes/Commom.Routes";
 import { FavoritesRoutes } from "./routes/Favorites.Routes";
 import { FriendshipRoutes } from "./routes/Friendship.Routes";
 import { MarketRoutes } from "./routes/Market.Routes";
+import { NotificationsRoutes } from "./routes/Notifications.Routes";
 import { ProductRoutes } from "./routes/Product.Routes";
 import { PurchaseRoutes } from "./routes/Purchase.Routes";
 import { StaticRoutes } from "./routes/Static.Routes";
@@ -21,6 +22,7 @@ ProductRoutes.applyRoutes(router);
 PurchaseRoutes.applyRoutes(router);
 BasePurchaseRoutes.applyRoutes(router);
 FavoritesRoutes.applyRoutes(router);
+NotificationsRoutes.applyRoutes(router);
 
 CommonRoutes.applyRoutes(router);
 

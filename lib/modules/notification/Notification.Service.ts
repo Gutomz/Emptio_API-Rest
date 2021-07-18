@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { FilterQuery, QueryOptions, Document } from 'mongoose';
+import { Document, FilterQuery, QueryOptions } from 'mongoose';
 import { formatDate } from "../../utils/date";
 import FirebaseService from '../firebase/Firebase.Service';
 import { IUserConfigurations } from '../user/User.Model';
@@ -39,6 +39,14 @@ class NotificationService {
 
   async count(filter: FilterQuery<INotification>) {
     return NotificationSchema.countDocuments(filter);
+  }
+
+  async findAndMarkAsViewed(filter: FilterQuery<INotification>, projection: any, options: QueryOptions) {
+    const notifications = await this.find(filter, projection, options);
+
+    await NotificationSchema.updateMany({ ...filter, viewed: false }, { viewed: true });
+
+    return notifications;
   }
 }
 

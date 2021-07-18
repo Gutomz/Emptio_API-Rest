@@ -56,10 +56,7 @@ export class FriendshipController {
     try {
       const { user } = req.body;
 
-      const requests = await FriendshipService.find({
-        friend: user.id,
-        status: FRIENDSHIP_STATUS.PENDING,
-      });
+      const requests = await FriendshipService.getRequests(user.id);
 
       response_success(res, requests);
     } catch (error) {
