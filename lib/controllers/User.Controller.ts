@@ -157,7 +157,9 @@ export class UserController {
         viewed: false,
       });
 
-      response_success(res, { ...user.toObject(), notificationCount });
+      const requestsCount = await FriendshipService.getRequestsCount(user.id);
+
+      response_success(res, { ...user.toObject(), notificationCount, requestsCount });
     } catch (error) {
       response_handleError(res, error);
     }

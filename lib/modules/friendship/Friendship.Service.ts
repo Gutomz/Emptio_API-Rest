@@ -111,6 +111,10 @@ class FriendshipService {
     return requests;
   }
 
+  public async getRequestsCount(id: string) {
+    return this.getDocumentCount({ friend: id, status: FRIENDSHIP_STATUS.PENDING });
+  }
+
   public async getFollowersCount(id: string) {
     return this.getDocumentCount({ friend: id, status: FRIENDSHIP_STATUS.ACCEPTED });
   }
