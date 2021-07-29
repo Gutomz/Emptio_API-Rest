@@ -123,15 +123,16 @@ class PurchaseValidator {
 
   async validate_connect_market(body: any, params: any): Promise<boolean> {
     if (!body || !params) {
-      throw new MissingFieldError(['purchase_id', 'market_id']);
+      throw new MissingFieldError(['purchase_id', 'market_id', "place_id"]);
     }
 
     const { id } = params;
-    const { user, market_id } = body;
+    const { user, market_id, place_id } = body;
 
     await this.validate_purchase_exist(user.id, id);
     await this.validate_can_edit(id);
     if (market_id) await this.validate_market_id(id, market_id);
+    if (place_id) CommonValidator.validate_field(place_id, "place_id");
 
     return true;
   }

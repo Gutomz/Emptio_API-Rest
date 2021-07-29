@@ -68,14 +68,14 @@ class Environment {
 
   getGoogleApiKey(): string {
     if (this.environment === Environments.prod_environment) {
-      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+      return 'AIzaSyDGo24Qa5Dpwt-zqpGD8It7OdoCXsOoZtY';
     } else if (this.environment === Environments.dev_environment) {
-      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+      return 'AIzaSyDGo24Qa5Dpwt-zqpGD8It7OdoCXsOoZtY';
     } else if (this.environment === Environments.qa_environment) {
-      return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+      return 'AIzaSyDGo24Qa5Dpwt-zqpGD8It7OdoCXsOoZtY';
     }
 
-    return 'AIzaSyBZKhavZXshqhe8A8WBD1T2P1O-lwzQCxE';
+    return 'AIzaSyDGo24Qa5Dpwt-zqpGD8It7OdoCXsOoZtY';
   }
 }
 

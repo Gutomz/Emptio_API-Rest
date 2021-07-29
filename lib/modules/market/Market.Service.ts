@@ -1,14 +1,14 @@
+import { Place } from '@googlemaps/google-maps-services-js';
 import axios from 'axios';
 import * as moment from 'moment';
-import { Place } from '@googlemaps/google-maps-services-js';
 import { Document, FilterQuery, QueryOptions, UpdateQuery } from 'mongoose';
+import { InvalidFieldError } from '../../errors/Field.Error';
+import { formatDate } from '../../utils/date';
+import { getMarketLogo } from '../../utils/market_logo';
+import MapsService from '../maps/Maps.Service';
+import UploadService from '../upload/Upload.Service';
 import { IMarket } from './Market.Model';
 import MarketSchema from './Market.Schema';
-import MapsService from '../maps/Maps.Service';
-import { formatDate } from '../../utils/date';
-import { InvalidFieldError } from '../../errors/Field.Error';
-import { getMarketLogo } from '../../utils/market_logo';
-import UploadService from '../upload/Upload.Service';
 
 class MarketService {
 
@@ -29,7 +29,7 @@ class MarketService {
   }
 
   public async create(market: IMarket): Promise<Document<IMarket>> {
-    market.createdAt = market.updatedAt = formatDate(moment()); 
+    market.createdAt = market.updatedAt = formatDate(moment());
     return MarketSchema.create(market);
   }
 
@@ -66,7 +66,7 @@ class MarketService {
     if (parsedPlace.website) {
       const image = await getMarketLogo(parsedPlace.website);
 
-      if(image) {
+      if (image) {
         const { link } = await UploadService.uploadMarketImage(image);
         parsedPlace.image = link;
       }
@@ -77,6 +77,10 @@ class MarketService {
     }
 
     return this.updateById(_market.id, parsedPlace, { new: true });
+  }
+
+  async find(query: FilterQuery<IMarket>, projection?: any, options?: QueryOptions): Promise<Document<IMarket>[]> {
+    return MarketSchema.find(query, projection, options);
   }
 
   async findById(product_id: string, projection?: any, options?: QueryOptions) {

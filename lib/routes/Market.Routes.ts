@@ -12,7 +12,10 @@ export class MarketRoutes {
 
   public static applyRoutes(router: Router) {
 
+    // * Get
+    router.get(this.getFullPath(), authMiddleware, this.controller.find);
+
     // * Get By Google Id
-    router.get(this.getFullPath('/:google_id'), authMiddleware, this.controller.getByGoogleId);
+    router.get(this.getFullPath('/place/:google_id'), authMiddleware, this.controller.getByGoogleId);
   }
 }

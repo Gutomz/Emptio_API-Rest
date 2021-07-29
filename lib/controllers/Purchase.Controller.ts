@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { QueryOptions } from 'mongoose';
+import MarketService from '../modules/market/Market.Service';
 import { IProduct } from '../modules/product/Product.Model';
 import ProductService from '../modules/product/Product.Service';
 import { IPurchase, IPurchaseItem } from '../modules/purchase/Purchase.Model';
@@ -110,9 +111,16 @@ export class PurchaseController {
       await PurchaseValidator.validate_connect_market(req.body, req.params);
 
       const { id } = req.params;
-      const { market_id } = req.body;
+      const { market_id, place_id } = req.body;
 
-      await PurchaseService.connectMarket(id, market_id || null);
+      let connect_id = market_id || null;
+      if (place_id) {
+        console.log(place_id);
+        const market = await MarketService.getByGoogleId(place_id);
+        connect_id = market.id;
+      }
+
+      await PurchaseService.connectMarket(id, connect_id);
 
       const response = await PurchaseService.findByIdPopulated(id);
 

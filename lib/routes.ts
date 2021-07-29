@@ -1,7 +1,7 @@
 import * as express from "express";
 import { AuthRoutes } from "./routes/Auth.Routes";
 import { BasePurchaseRoutes } from "./routes/BasePurchase.Routes";
-import { CommonRoutes } from "./routes/Commom.Routes";
+import { CommonRoutes } from "./routes/Common.Routes";
 import { FavoritesRoutes } from "./routes/Favorites.Routes";
 import { FriendshipRoutes } from "./routes/Friendship.Routes";
 import { MarketRoutes } from "./routes/Market.Routes";
