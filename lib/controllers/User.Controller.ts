@@ -244,7 +244,7 @@ export class UserController {
     }
   }
 
-  public async getProfile(req: Request, res: Response) {
+  public async getProfileById(req: Request, res: Response) {
     try {
       const { user } = req.body;
       const { id } = req.params;
@@ -269,6 +269,44 @@ export class UserController {
       };
 
       response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async getProfiles(req: Request, res: Response) {
+    try {
+      const { query, body } = req;
+      const { user: me } = body;
+      const search: string = query.search ? query.search.toString() : "";
+      const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
+      const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+
+      const users = await UserService.find({
+        _id: { $ne: me.id },
+        $or: [
+          { name: { $regex: search, $options: 'ix' } },
+          { email: { $regex: search, $options: 'ix' } }
+        ]
+      }, null, { limit, skip });
+
+      const data = [];
+      for (let index in users) {
+        const user = users[index];
+
+        const friendship = await FriendshipService.findOne({ owner: me.id, friend: user.id });
+        const status = friendship ? friendship.get('status') : FRIENDSHIP_STATUS.NONE;
+        const isFollowing = friendship != null && FRIENDSHIP_STATUS.ACCEPTED.includes(status);
+
+        data.push({
+          user,
+          isFollowing,
+          friendshipStatus: status,
+          friendshipId: friendship ? friendship.id : null,
+        });
+      }
+
+      response_success(res, data);
     } catch (error) {
       response_handleError(res, error);
     }

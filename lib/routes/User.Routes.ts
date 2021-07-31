@@ -42,7 +42,10 @@ export class UserRoutes {
     // * Update PushToken
     router.patch(this.getFullPath('/pushToken'), authMiddleware, this.controller.updatePushToken);
 
-    // * Get Profile
-    router.get(this.getFullPath('/profile/:id'), authMiddleware, this.controller.getProfile);
+    // * Search Profiles
+    router.get(this.getFullPath('/profiles/all'), authMiddleware, this.controller.getProfiles);
+
+    // * Get Profile By Id
+    router.get(this.getFullPath('/profiles/:id'), authMiddleware, this.controller.getProfileById);
   }
 }
