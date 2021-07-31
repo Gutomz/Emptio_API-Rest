@@ -86,6 +86,12 @@ class UserValidator {
 
     return true;
   }
+
+  async validate_update_canNotify({ canNotify }): Promise<boolean> {
+    CommonValidator.validate_field(canNotify, 'canNotify');
+
+    return true;
+  }
 }
 
 export default new UserValidator();

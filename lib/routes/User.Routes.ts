@@ -42,6 +42,9 @@ export class UserRoutes {
     // * Update PushToken
     router.patch(this.getFullPath('/pushToken'), authMiddleware, this.controller.updatePushToken);
 
+    // * Update CanNotify
+    router.patch(this.getFullPath('/canNotify'), authMiddleware, this.controller.updateCanNotify);
+
     // * Search Profiles
     router.get(this.getFullPath('/profiles/all'), authMiddleware, this.controller.getProfiles);
 

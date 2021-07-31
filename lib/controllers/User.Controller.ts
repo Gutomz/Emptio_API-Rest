@@ -148,18 +148,26 @@ export class UserController {
     }
   }
 
+  public static async loadMe(id) {
+    const user = await UserService.findById(id, '+configurations +location');
+
+    const notificationCount = await NotificationService.count({
+      owner: id,
+      viewed: false,
+    });
+
+    const requestsCount = await FriendshipService.getRequestsCount(id);
+
+    return { ...user.toObject(), notificationCount, requestsCount };
+  }
+
   public async getMe(req: Request, res: Response) {
     try {
       const { user } = req.body;
 
-      const notificationCount = await NotificationService.count({
-        owner: user.id,
-        viewed: false,
-      });
+      const data = await UserController.loadMe(user.id);
 
-      const requestsCount = await FriendshipService.getRequestsCount(user.id);
-
-      response_success(res, { ...user.toObject(), notificationCount, requestsCount });
+      response_success(res, data);
     } catch (error) {
       response_handleError(res, error);
     }
@@ -215,10 +223,9 @@ export class UserController {
 
       const location = parseLocation(_location);
 
-      const response = await UserService.updateById(
-        user.id, { location },
-        { new: true, projection: "+location +configurations" }
-      );
+      await UserService.updateById(user.id, { location });
+
+      const response = await UserController.loadMe(user.id);
 
       response_success(res, response);
     } catch (error) {
@@ -232,11 +239,31 @@ export class UserController {
 
       const { user, pushToken } = req.body;
 
-      const response = await UserService.updateById(
+      await UserService.updateById(
         user.id,
         { 'configurations.pushToken': pushToken },
-        { new: true, projection: "+location +configurations" }
       );
+
+      const response = await UserController.loadMe(user.id);
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async updateCanNotify(req: Request, res: Response) {
+    try {
+      await UserValidator.validate_update_canNotify(req.body);
+
+      const { user, canNotify } = req.body;
+
+      await UserService.updateById(
+        user.id,
+        { 'configurations.canNotify': canNotify },
+      );
+
+      const response = await UserController.loadMe(user.id);
 
       response_success(res, response);
     } catch (error) {
