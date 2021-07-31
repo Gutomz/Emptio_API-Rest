@@ -42,7 +42,7 @@ class MarketService {
     return MarketSchema.findByIdAndUpdate(_id, _data, options);
   }
 
-  public async getByGoogleId(place_id: string): Promise<Document<IMarket>> {
+  public async getByPlaceId(place_id: string): Promise<Document<IMarket>> {
     const _market = await MarketSchema.findOne({ place_id });
 
     if (_market) {

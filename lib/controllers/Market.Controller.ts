@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { FilterQuery } from 'mongoose';
 import { IMarket } from '../modules/market/Market.Model';
 import MarketService from '../modules/market/Market.Service';
+import MarketValidator from '../modules/market/Market.Validator';
 import {
   response_handleError, response_success
 } from '../utils/http_response';
@@ -33,11 +34,25 @@ export class MarketController {
     }
   }
 
-  public async getByGoogleId(req: Request, res: Response) {
+  public async getById(req: Request, res: Response) {
     try {
-      const { google_id } = req.params;
+      const { id } = req.params;
 
-      const place = await MarketService.getByGoogleId(google_id);
+      MarketValidator.validate_market_exist(id);
+
+      const place = await MarketService.findById(id);
+
+      response_success(res, place);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async getByPlaceId(req: Request, res: Response) {
+    try {
+      const { place_id } = req.params;
+
+      const place = await MarketService.getByPlaceId(place_id);
 
       response_success(res, place);
     } catch (error) {

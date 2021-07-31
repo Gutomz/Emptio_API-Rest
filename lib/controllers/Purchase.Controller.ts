@@ -115,8 +115,7 @@ export class PurchaseController {
 
       let connect_id = market_id || null;
       if (place_id) {
-        console.log(place_id);
-        const market = await MarketService.getByGoogleId(place_id);
+        const market = await MarketService.getByPlaceId(place_id);
         connect_id = market.id;
       }
 

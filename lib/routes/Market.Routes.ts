@@ -15,7 +15,10 @@ export class MarketRoutes {
     // * Get
     router.get(this.getFullPath(), authMiddleware, this.controller.find);
 
+    // * Get By Id
+    router.get(this.getFullPath('/:id'), authMiddleware, this.controller.getById);
+
     // * Get By Google Id
-    router.get(this.getFullPath('/place/:google_id'), authMiddleware, this.controller.getByGoogleId);
+    router.get(this.getFullPath('/place/:place_id'), authMiddleware, this.controller.getByPlaceId);
   }
 }
