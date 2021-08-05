@@ -40,10 +40,11 @@ class FavoritesValidator {
 
   async validate_addMarket(body: any, params: any) {
     const { id } = params;
-    const { user, market_id } = body;
+    const { user, market_id, place_id } = body;
 
     await this.validate_favorite_exist(user.id, id);
-    await this.validate_market_id(market_id, id, true);
+    if(place_id) CommonValidator.validate_field(place_id, 'place_id');
+    else await this.validate_market_id(market_id, id, true);
   }
 
   async validate_removeMarket(body: any, params: any) {

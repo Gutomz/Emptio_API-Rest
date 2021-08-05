@@ -11,7 +11,8 @@ class FavoritesService {
 
   public async create(model: IFavorites) {
     model.createdAt = model.updatedAt = formatDate(moment());
-    return FavoritesSchema.create(model);
+    const favorite = await FavoritesSchema.create(model);
+    return this.findByIdPopulated(favorite.id);
   }
 
   public async delete(favorite_id: string) {
@@ -55,6 +56,10 @@ class FavoritesService {
 
   public async find(filter: FilterQuery<IFavorites>, projection?: any, options?: QueryOptions) {
     return FavoritesSchema.find(filter, projection, options);
+  }
+
+  public async findOne(filter: FilterQuery<IFavorites>, projection?: any, options?: QueryOptions) {
+    return FavoritesSchema.findOne(filter, projection, options);
   }
 }
 

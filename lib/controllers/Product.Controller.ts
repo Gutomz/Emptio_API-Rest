@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import BasePurchaseService from '../modules/base_purchase/BasePurchase.Service';
+import FavoritesService from '../modules/favorites/Favorites.Service';
 import { IProduct } from '../modules/product/Product.Model';
 import ProductService from '../modules/product/Product.Service';
 import ProductValidator from '../modules/product/Product.Validator';
@@ -51,17 +52,25 @@ export class ProductController {
 
   public async find(req: Request, res: Response) {
     try {
-      const { query } = req;
+      const { query, body } = req;
+      const { user } = body;
       const search: string = query.search ? query.search.toString().toLowerCase() : "";
       const purchase_id: string = query.purchase_id ? query.purchase_id.toString() : "";
       const basePurchase_id: string = query.basePurchase_id ? query.basePurchase_id.toString() : "";
+      const isFavorite: Boolean = query.isFavorite ? query.isFavorite.toString().includes('true') : false;
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
 
       let market_id = "";
       let excludeList = [];
 
-      if (purchase_id) {
+      if (isFavorite) {
+        const favorites = await FavoritesService.find({ owner: user.id });
+        for (let index in favorites) {
+          const favorite = favorites[index];
+          excludeList.push(favorite.get('product'));
+        }
+      } else if (purchase_id) {
         const purchase = await PurchaseService.findOne({ _id: purchase_id }, null, { populate: "items" });
         if (purchase != null) {
           market_id = purchase.get('market');

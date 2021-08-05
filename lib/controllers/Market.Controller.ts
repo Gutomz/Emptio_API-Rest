@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { FilterQuery } from 'mongoose';
+import FavoritesService from '../modules/favorites/Favorites.Service';
 import { IMarket } from '../modules/market/Market.Model';
 import MarketService from '../modules/market/Market.Service';
 import MarketValidator from '../modules/market/Market.Validator';
@@ -16,8 +17,16 @@ export class MarketController {
       const search: string = query.search ? query.search.toString().toLowerCase() : "";
       const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
       const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+      const favorite_id: string = query.favorite_id ? query.favorite_id.toString() : "";
+
+      let excludeList = [];
+      if (favorite_id) {
+        const favorite = await FavoritesService.findOne({ _id: favorite_id });
+        excludeList.push(favorite.get('markets'));
+      }
 
       const filter: FilterQuery<IMarket> = {
+        _id: { $nin: excludeList },
         $or: [
           { name: { $regex: search, $options: 'ix' } },
           { address: { $regex: search, $options: 'ix' } },

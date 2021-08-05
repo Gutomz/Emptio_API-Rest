@@ -26,5 +26,8 @@ export class FavoritesRoutes {
 
     // * Get My
     router.get(this.getFullPath(), authMiddleware, this.controller.find);
+
+    // * Get Details
+    router.get(this.getFullPath('/:id'), authMiddleware, this.controller.findById);
   }
 }

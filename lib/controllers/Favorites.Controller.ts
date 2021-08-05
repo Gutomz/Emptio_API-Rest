@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-
-import { 
-  response_success, 
-  response_handleError 
-} from '../utils/http_response';
-
 import { UnimplementedError } from '../errors/Unimplemented.Error';
-import FavoritesValidator from '../modules/favorites/Favorites.Validator';
 import { IFavorites } from '../modules/favorites/Favorites.Model';
 import FavoritesService from '../modules/favorites/Favorites.Service';
+import FavoritesValidator from '../modules/favorites/Favorites.Validator';
+import MarketService from '../modules/market/Market.Service';
+import {
+  response_handleError, response_success
+} from '../utils/http_response';
+
+
 
 export class FavoritesController {
 
@@ -36,10 +36,15 @@ export class FavoritesController {
       await FavoritesValidator.validate_addMarket(req.body, req.params);
 
       const { id } = req.params;
-      const { market_id } = req.body;
+      const { market_id, place_id } = req.body;
 
-      const response = await FavoritesService.addMarket(id, market_id);
-      
+      let _marketId = market_id;
+      if (place_id) {
+        _marketId = (await MarketService.getByPlaceId(place_id)).id;
+      }
+
+      const response = await FavoritesService.addMarket(id, _marketId);
+
       response_success(res, response);
     } catch (error) {
       response_handleError(res, error);
@@ -53,7 +58,7 @@ export class FavoritesController {
       const { id, market_id } = req.params;
 
       const response = await FavoritesService.removeMarket(id, market_id);
-      
+
       response_success(res, response);
     } catch (error) {
       response_handleError(res, error);
@@ -86,6 +91,21 @@ export class FavoritesController {
       const response = await FavoritesService.findPopulated({
         owner: user.id,
       }, null, { limit, skip });
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async findById(req: Request, res: Response) {
+    try {
+      const { params } = req;
+
+      const { id } = params;
+
+      // TODO - change this to specific call
+      const response = await FavoritesService.findByIdPopulated(id);
 
       response_success(res, response);
     } catch (error) {
