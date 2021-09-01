@@ -28,6 +28,12 @@ class ProductValidator {
 
     return true;
   }
+
+  async validate_recognize({ image }) {
+    CommonValidator.validate_base64_url(image, "image");
+
+    return true;
+  }
 }
 
 export default new ProductValidator();
