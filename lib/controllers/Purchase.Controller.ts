@@ -220,9 +220,7 @@ export class PurchaseController {
       const { id } = req.params;
       const { user } = req.body;
 
-      await PurchaseService.complete(id, user.id);
-
-      const response = await PurchaseService.findByIdPopulated(id);
+      const response = await PurchaseService.complete(id, user.id);
 
       response_success(res, response);
     } catch (error) {

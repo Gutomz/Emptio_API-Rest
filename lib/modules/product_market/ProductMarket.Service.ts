@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { FilterQuery, QueryOptions, Document } from "mongoose";
+import { Document, FilterQuery, QueryOptions } from "mongoose";
 import { formatDate } from "../../utils/date";
 import FavoritesService from '../favorites/Favorites.Service';
 import MarketService from '../market/Market.Service';
@@ -15,48 +15,75 @@ class ProductMarketService {
   }
 
   public async update(model: IProductMarket) {
-    model.updatedAt = formatDate(moment());
+    model.createdAt = model.updatedAt = formatDate(moment());
 
     let productMarket;
+    let alertUsers = true;
     if (await this.exist({ market: model.market, product: model.product })) {
-      productMarket = await ProductMarketSchema.findOneAndUpdate({
+      productMarket = await this.findLast({
         market: model.market,
         product: model.product,
-        price: { $ne: model.price }
-      }, model, { new: true });
+      });
+
+      if (productMarket.price !== model.price) {
+        productMarket = await ProductMarketSchema.create(model);
+      } else {
+        alertUsers = false;
+      }
     } else {
       productMarket = await ProductMarketSchema.create(model);
     }
 
-    if (productMarket) {
+    if (alertUsers) {
       this.alertUsers(model);
     }
 
-    return this.findOne({ product: model.product, market: model.market });
+    return productMarket;
+  }
+
+  public async findLast(query?: FilterQuery<IProductMarket>) {
+    return this.findOnePopulated(query, null, { sort: { createdAt: -1 } })
   }
 
   public async findOne(query?: FilterQuery<IProductMarket>, projection?: any, options?: QueryOptions): Promise<Document<IProductMarket>> {
     return ProductMarketSchema.findOne(query, projection, options).populate('updatedBy', 'name');
   }
 
+  public async findOnePopulated(query?: FilterQuery<IProductMarket>, projection?: any, options?: QueryOptions): Promise<Document<IProductMarket>> {
+    return ProductMarketSchema.findOne(query, projection, options).populate([
+      {
+        path: "updatedBy",
+        select: "name",
+      },
+      {
+        path: "product",
+      },
+      {
+        path: "market",
+      },
+    ]);
+  }
+
   public async alertUsers(model: IProductMarket) {
     const product = await ProductService.findById(model.product, 'name variation');
     const market = await MarketService.findById(model.market, 'name');
 
-    const users = await FavoritesService.find({
+    const favorites = await FavoritesService.find({
       product: model.product,
       markets: model.market,
     }, '+owner');
 
-    for (let index in users) {
-      const user = users[index];
+    for (let index in favorites) {
+      const favorite = favorites[index];
+
+      // TODO - don't notify model.updatedBy user
 
       const notification: INotification = {
         title: `Alerta de Preço`,
-        body: `O preço do produto ${product.get('name')} - ${product.get('variation')} 
-        está custando R$ ${model.price.toPrecision(2).replace('.', ',')} 
-        no mercado ${market.get('name')}`,
-        owner: user.id,
+        body: `O preço do produto ${product.get('name')} - ${product.get('variation')} `
+          + `está custando R$ ${model.price.toPrecision(2).replace('.', ',')} `
+          + `no mercado ${market.get('name')}`,
+        owner: favorite.get("owner"),
       }
 
       NotificationService.create(notification);

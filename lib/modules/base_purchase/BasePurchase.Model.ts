@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IProduct } from "../product/Product.Model";
 import { IUser } from "../user/User.Model";
 
@@ -11,7 +12,8 @@ export interface IBasePurchase {
   _id?: string;
   owner: string | IUser;
   name?: string;
-  items?: string[] | IBasePurchaseItem[];
+  items?: string[] | IBasePurchaseItem[] | Types.ObjectId[];
+  visible?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

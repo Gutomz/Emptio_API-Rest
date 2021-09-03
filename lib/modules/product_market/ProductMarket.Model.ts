@@ -5,4 +5,5 @@ export interface IProductMarket {
   price: number;
   updatedBy: string;
   updatedAt?: string;
+  createdAt?: string;
 }

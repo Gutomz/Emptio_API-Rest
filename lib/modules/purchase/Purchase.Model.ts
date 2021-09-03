@@ -7,6 +7,7 @@ export interface IPurchaseItem {
   price: number;
   quantity: number;
   checked?: boolean;
+  completedProductMarket?: string;
 }
 
 export interface IPurchase {
@@ -15,7 +16,7 @@ export interface IPurchase {
   market?: string | IMarket;
   items?: IPurchaseItem[] | string[];
   cost?: number;
-  ematimatedCost?: number;
+  estimatedCost?: number;
   limit?: number;
   status?: string;
   createdAt?: string;

@@ -22,7 +22,7 @@ export class MarketController {
       let excludeList = [];
       if (favorite_id) {
         const favorite = await FavoritesService.findOne({ _id: favorite_id });
-        excludeList.push(favorite.get('markets'));
+        excludeList.push(...favorite.get('markets'));
       }
 
       const filter: FilterQuery<IMarket> = {

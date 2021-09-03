@@ -55,7 +55,7 @@ export class BasePurchaseController {
       const { user } = body;
 
       const order = isDesc ? -1 : 1;
-      const searchQuery: QueryOptions = {
+      const options: QueryOptions = {
         limit,
         skip,
         sort: orderBy.includes("updatedAt") ? { updatedAt: order } : { createdAt: order },
@@ -64,7 +64,8 @@ export class BasePurchaseController {
       const response = await BasePurchaseService.findPopulated({
         owner: user.id,
         name: { $regex: search, $options: 'ix' },
-      }, null, searchQuery);
+        visible: true,
+      }, null, options);
 
       response_success(res, response);
     } catch (error) {

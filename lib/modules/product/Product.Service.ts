@@ -51,7 +51,7 @@ class ProductService {
     for(let id in _docs) {
       const product = _docs[id];
 
-      const productMarket = await ProductMarketService.findOne({ 
+      const productMarket = await ProductMarketService.findLast({ 
         market: market_id, 
         product: product.id
       });
