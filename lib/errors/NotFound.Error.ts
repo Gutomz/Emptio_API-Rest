@@ -87,7 +87,18 @@ export class ProductMarketNotFoundError extends Error implements INotFoundError 
   constructor() {
     super("ProductMarket not found!");
 
-    this.code = ERROR_CODE.FAVORITE_NOT_FOUND;
+    this.code = ERROR_CODE.PRODUCT_MARKET_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
+
+export class PostNotFoundError extends Error implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Post not found!");
+
+    this.code = ERROR_CODE.POST_NOT_FOUND;
     this.name = ERROR_NAME.NOT_FOUND;
   }
 }

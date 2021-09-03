@@ -15,10 +15,22 @@ export class PostRoutes {
     // * Create
     router.post(this.getFullPath(), authMiddleware, this.controller.create);
 
-    // * Get
-    router.get(this.getFullPath(), authMiddleware, this.controller.get);
+    // * Get Feed
+    router.get(this.getFullPath("/feed"), authMiddleware, this.controller.getFeed);
+
+    // * Get By Id
+    router.get(this.getFullPath("/:id"), authMiddleware, this.controller.getById);
+
+    // * Get User Specific Posts
+    router.get(this.getFullPath("/profiles/:profile_id"), authMiddleware, this.controller.getProfile);
 
     // * Delete
     router.delete(this.getFullPath('/:id'), authMiddleware, this.controller.delete);
+
+    // * Like Post
+    router.put(this.getFullPath("/:id/like"), authMiddleware, this.controller.like);
+
+    // * Dislike Post
+    router.put(this.getFullPath("/:id/dislike"), authMiddleware, this.controller.dislike);
   }
 }

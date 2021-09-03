@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { UnimplementedError } from '../errors/Unimplemented.Error';
+import { FilterQuery, QueryOptions } from 'mongoose';
 import BasePurchaseService from '../modules/base_purchase/BasePurchase.Service';
+import FriendshipService from '../modules/friendship/Friendship.Service';
 import { IPost, IPostData, PostDataType } from '../modules/post/Post.Model';
 import PostService from '../modules/post/Post.Service';
 import PostValidator from '../modules/post/Post.Validator';
@@ -51,19 +52,122 @@ export class PostController {
     }
   }
 
-  // TODO - Implement get controller
-  public async get(req: Request, res: Response) {
+  public async getFeed(req: Request, res: Response) {
     try {
-      throw new UnimplementedError('Post.Controller.ts', 'get()');
+
+      const { body, query } = req;
+
+      const { user } = body;
+
+      const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
+      const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+
+      const followingList = await FriendshipService.getFollowingList(user);
+
+      const ownersList = [user.id, ...followingList];
+      const filter: FilterQuery<IPost> = {
+        owner: { $in: ownersList },
+      };
+
+      const options: QueryOptions = { limit, skip, sort: { createdAt: -1 } };
+
+      const response = await PostService.findPopulated(filter, null, options);
+
+      response_success(res, response);
     } catch (error) {
       response_handleError(res, error);
     }
   }
 
-  // TODO - Implement delete controller
+  public async getById(req: Request, res: Response) {
+    try {
+      const { params } = req;
+
+      // const { user } = body;
+      const { id } = params;
+
+      // TODO - check if requesting user is friend of owner of post id
+
+      const response = await PostService.findByIdPopulated(id);
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async getProfile(req: Request, res: Response) {
+    try {
+      const { body, params, query } = req;
+
+      const { user } = body;
+      const { profile_id } = params;
+
+      const limit: number = query.limit ? Number.parseInt(query.limit.toString()) : 10;
+      const skip: number = query.skip ? Number.parseInt(query.skip.toString()) : 0;
+
+      let isFriend = true;
+      if (user.id !== profile_id) {
+        isFriend = await FriendshipService.isFriend(user.id, profile_id);
+      }
+
+      const filter = {
+        owner: profile_id,
+      };
+
+      const options: QueryOptions = { limit, skip, sort: { createdAt: -1 } };
+
+      const response = isFriend ? await PostService.findPopulated(filter, null, options) : [];
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
   public async delete(req: Request, res: Response) {
     try {
-      throw new UnimplementedError('Post.Controller.ts', 'delete()');
+      const { params } = req;
+
+      const { id } = params;
+
+      const response = await PostService.delete(id);
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async like(req: Request, res: Response) {
+    try {
+      const { body, params } = req;
+
+      const { user } = body;
+      const { id } = params;
+
+      await PostService.toggleLike(id, user.id);
+
+      const response = await PostService.findByIdPopulated(id);
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
+  public async dislike(req: Request, res: Response) {
+    try {
+      const { body, params } = req;
+
+      const { user } = body;
+      const { id } = params;
+
+      await PostService.toggleDislike(id, user.id);
+
+      const response = await PostService.findByIdPopulated(id);
+
+      response_success(res, response);
     } catch (error) {
       response_handleError(res, error);
     }

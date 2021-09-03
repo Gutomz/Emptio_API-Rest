@@ -6,6 +6,7 @@ import AuthService from '../modules/auth/Auth.Service';
 import FriendshipService from '../modules/friendship/Friendship.Service';
 import MailService from '../modules/mail/Mail.Service';
 import NotificationService from '../modules/notification/Notification.Service';
+import PostService from '../modules/post/Post.Service';
 import UploadService, { IUploadResponse } from '../modules/upload/Upload.Service';
 import { IUser } from '../modules/user/User.Model';
 import UserService from '../modules/user/User.Service';
@@ -283,12 +284,13 @@ export class UserController {
       const friendship = !isMe && await FriendshipService.findOne({ owner: user.id, friend: id });
       const status = friendship ? friendship.get('status') : FRIENDSHIP_STATUS.NONE;
       const isFollowing = friendship != null && FRIENDSHIP_STATUS.ACCEPTED.includes(status);
+      const postsCount = await PostService.getCount(id);
 
       const response = {
         user: responseUser,
         followersCount,
         followingCount,
-        postsCount: 0,
+        postsCount,
         isMe,
         isFollowing,
         friendshipStatus: status,

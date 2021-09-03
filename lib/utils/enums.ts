@@ -30,6 +30,7 @@ export enum ERROR_CODE {
   PRODUCT_NOT_FOUND = 'product_not_found_error',
   FAVORITE_NOT_FOUND = 'favorite_not_found_error',
   PRODUCT_MARKET_NOT_FOUND = 'product_market_not_found_error',
+  POST_NOT_FOUND = 'post_not_found_error',
   INVALID_FIELD = 'invalid_field_error',
   MISSING_FIELD = 'missing_field_error',
   UNIQUE_FIELD = 'unique_field_error',

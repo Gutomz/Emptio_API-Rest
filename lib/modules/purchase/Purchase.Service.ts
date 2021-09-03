@@ -146,7 +146,21 @@ class PurchaseService {
           path: 'items',
           populate: [
             { path: 'product' },
-            { path: "completedProductMarket" },
+            {
+              path: "completedProductMarket",
+              populate: [
+                {
+                  path: "product"
+                },
+                {
+                  path: "market",
+                },
+                {
+                  path: "updatedBy",
+                  select: "name",
+                }
+              ],
+            },
           ],
         },
         {
@@ -166,14 +180,28 @@ class PurchaseService {
       .populate([
         {
           path: 'items',
-          populate: { path: 'product' }
+          populate: [
+            { path: 'product' },
+            {
+              path: "completedProductMarket",
+              populate: [
+                {
+                  path: "product"
+                },
+                {
+                  path: "market",
+                },
+                {
+                  path: "updatedBy",
+                  select: "name",
+                }
+              ],
+            },
+          ],
         },
         {
           path: 'market',
         },
-        {
-          path: "completedProductMarket",
-        }
       ]);
 
     const purchases = _docs.map((purchase) => ({

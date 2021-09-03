@@ -22,7 +22,6 @@ const PostSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Types.ObjectId,
     ref: DBModels.USER,
-    select: false,
     required: true,
   },
   description: {
