@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { Document, FilterQuery, QueryOptions } from 'mongoose';
 import { formatDate } from "../../utils/date";
-import FirebaseService from '../firebase/Firebase.Service';
+import FirebaseService, { IMessagingPayload } from '../firebase/Firebase.Service';
 import { IUserConfigurations } from '../user/User.Model';
 import UserService from "../user/User.Service";
 import { INotification } from "./Notification.Model";
@@ -25,12 +25,16 @@ class NotificationService {
         badge: badge.toString(),
       });
 
-      try {
-        await FirebaseService.sendToDevice(pushToken, payload);
-      } catch (_) { /* do nothing */ }
+      await this.sendToDevice(pushToken, payload);
     }
 
     return notification;
+  }
+
+  async sendToDevice(token, message: IMessagingPayload) {
+    try {
+      await FirebaseService.sendToDevice(token, message);
+    } catch (_) { /* do nothing */ }
   }
 
   async find(filter: FilterQuery<INotification>, projection: any, options: QueryOptions) {
