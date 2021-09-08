@@ -25,6 +25,25 @@ export class BasePurchaseController {
     }
   }
 
+  public async copy(req: Request, res: Response) {
+    try {
+      const { user, purchaseId, basePurchaseId, name } = req.body;
+
+      let purchase;
+      if (purchaseId) {
+        purchase = await BasePurchaseService.copyFromPurchase(user.id, name, purchaseId, true);
+      } else {
+        purchase = await BasePurchaseService.copy(user.id, name, basePurchaseId, true);
+      }
+
+      const response = await BasePurchaseService.findByIdPopulated(purchase.id);
+
+      response_success(res, response);
+    } catch (error) {
+      response_handleError(res, error);
+    }
+  }
+
   public async update(req: Request, res: Response) {
     try {
       await BasePurchaseValidator.validate_update(req.body, req.params);

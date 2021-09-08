@@ -14,13 +14,17 @@ class BasePurchaseService {
 
   async create(model: IBasePurchase) {
     if (!model.name) {
-      model.name = `Lista ${1 + (await this.count({ owner: model.owner }))}`;
+      model.name = `Lista ${1 + (await this.count({ owner: model.owner, visible: true }))}`;
     }
     model.createdAt = model.updatedAt = formatDate(moment());
     return BasePurchaseSchema.create(model);
   }
 
-  async copyFromPurchase(owner, name, purchaseId: string) {
+  async copyFromPurchase(owner, name, purchaseId: string, visible: boolean = false) {
+    if (!name) {
+      name = `Lista ${1 + (await this.count({ owner: owner, visible: true }))}`;
+    }
+
     const purchaseItems = await PurchaseService.findItems(purchaseId);
 
     const items = await this.parsePurchaseItems<IPurchaseItem>(purchaseItems);
@@ -28,14 +32,18 @@ class BasePurchaseService {
     const model: IBasePurchase = {
       owner,
       name,
-      visible: false,
+      visible,
       items,
     };
 
     return this.create(model);
   }
 
-  async copy(owner, name, purchaseId: string) {
+  async copy(owner, name, purchaseId: string, visible: boolean = false) {
+    if (!name) {
+      name = `Lista ${1 + (await this.count({ owner: owner, visible: true }))}`;
+    }
+
     const purchaseItems = await this.findItems(purchaseId);
 
     const items = await this.parsePurchaseItems<IBasePurchaseItem>(purchaseItems);
@@ -43,7 +51,7 @@ class BasePurchaseService {
     const model: IBasePurchase = {
       owner,
       name,
-      visible: false,
+      visible,
       items,
     };
 

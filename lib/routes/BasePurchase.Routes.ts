@@ -15,6 +15,9 @@ export class BasePurchaseRoutes {
     // * Create
     router.post(this.getFullPath(), authMiddleware, this.controller.create);
 
+    // * Copy from other purchase
+    router.post(this.getFullPath("/copy"), authMiddleware, this.controller.copy);
+
     // * Get My
     router.get(this.getFullPath(), authMiddleware, this.controller.find);
 
