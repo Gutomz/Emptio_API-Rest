@@ -56,6 +56,13 @@ class PurchaseService {
     return PurchaseSchema.deleteOne({ _id: model_id });
   }
 
+  public async findItems(purchaseId: string) {
+    const _doc: Document<IPurchase> = await PurchaseSchema
+      .findById(purchaseId)
+      .populate({ path: 'items' });
+    return _doc.get("items");
+  }
+
   public async updateById(id: string, data: UpdateWithAggregationPipeline | UpdateQuery<IPurchase>, options?: QueryOptions): Promise<Document<IPurchase>> {
     const _data = {
       ...data,
@@ -97,7 +104,7 @@ class PurchaseService {
     return this.updateById(purchase_id, { $push: { items: item._id } });
   }
 
-  public async updateItem(purchase_id: string, item_id: string, itemModel: IPurchaseItem) {
+  public async updateItem(purchase_id: string, item_id: string, itemModel) {
     await PurchaseItemSchema.updateOne({ _id: item_id }, itemModel);
     return this.findOneAndUpdate({ _id: purchase_id }, {});
   }
@@ -137,11 +144,28 @@ class PurchaseService {
       .populate([
         {
           path: 'items',
-          populate: { path: 'product' }
+          populate: [
+            { path: 'product' },
+            {
+              path: "completedProductMarket",
+              populate: [
+                {
+                  path: "product"
+                },
+                {
+                  path: "market",
+                },
+                {
+                  path: "updatedBy",
+                  select: "name",
+                }
+              ],
+            },
+          ],
         },
         {
           path: 'market',
-        }
+        },
       ]);
 
     return {
@@ -156,11 +180,28 @@ class PurchaseService {
       .populate([
         {
           path: 'items',
-          populate: { path: 'product' }
+          populate: [
+            { path: 'product' },
+            {
+              path: "completedProductMarket",
+              populate: [
+                {
+                  path: "product"
+                },
+                {
+                  path: "market",
+                },
+                {
+                  path: "updatedBy",
+                  select: "name",
+                }
+              ],
+            },
+          ],
         },
         {
           path: 'market',
-        }
+        },
       ]);
 
     const purchases = _docs.map((purchase) => ({
@@ -174,11 +215,11 @@ class PurchaseService {
   public async findItemById(purchase_id: string, item_id: string) {
     const purchase = await PurchaseSchema.findById(purchase_id);
 
-    const item = await PurchaseItemSchema.findById(item_id).populate('product');
+    const item = await PurchaseItemSchema.findById(item_id).populate(['product', 'completedProductMarket']);
     const market_id = purchase.get('market');
-    const product_id = item.get('product')._id;
+    const product_id = item.get('product').id;
 
-    const productMarket = await ProductMarketService.findOne({
+    const productMarket = await ProductMarketService.findLast({
       product: product_id,
       market: market_id,
     });
@@ -205,7 +246,9 @@ class PurchaseService {
     if (market_id) {
       const items: Document<IPurchaseItem>[] = purchase.get('items');
 
-      items.forEach((item) => {
+      for (let index in items) {
+        const item = items[index];
+
         const product = item.get('product');
         const price = item.get('price');
 
@@ -216,13 +259,13 @@ class PurchaseService {
           price,
         };
 
-        ProductMarketService.update(productMarket);
-      });
+        const completedProductMarket = (await ProductMarketService.update(productMarket)).id;
+
+        this.updateItem(purchase_id, item.id, { completedProductMarket });
+      }
     }
 
-    purchase.depopulate('items');
-
-    return purchase.toObject();
+    return this.findByIdPopulated(purchase_id);
   }
 
   async parseBasePurchaseItems(itemsDoc: Document<IBasePurchaseItem>[]): Promise<Array<Types.ObjectId>> {

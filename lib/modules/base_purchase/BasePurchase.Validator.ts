@@ -6,6 +6,13 @@ import ProductValidator from "../product/Product.Validator";
 import BasePurchaseService from "./BasePurchase.Service";
 
 class BasePurchaseValidator {
+  async validate_exist(id: string, fieldName: string = "basePurchase_id") {
+    CommonValidator.validate_object_id(id, fieldName);
+
+    if (!(await BasePurchaseService.exist({ _id: id }))) {
+      throw new PurchaseNotFoundError();
+    }
+  }
 
   validate_quantity(quantity: number) {
     CommonValidator.validate_number(quantity, 'quantity');

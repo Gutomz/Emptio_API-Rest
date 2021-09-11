@@ -13,5 +13,8 @@ export class NotificationsRoutes {
   public static applyRoutes(router: Router) {
     // * Get My
     router.get(this.getFullPath(), authMiddleware, this.controller.get);
+
+    // * Send test message to specific device 
+    router.post(this.getFullPath(), authMiddleware, this.controller.testNotification);
   }
 }

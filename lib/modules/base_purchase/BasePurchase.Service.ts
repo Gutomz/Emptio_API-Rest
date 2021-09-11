@@ -1,6 +1,8 @@
 import * as moment from 'moment';
 import { Document, FilterQuery, QueryOptions, Types, UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 import { formatDate } from "../../utils/date";
+import { IPurchaseItem } from '../purchase/Purchase.Model';
+import PurchaseService from '../purchase/Purchase.Service';
 import { IBasePurchase, IBasePurchaseItem } from "./BasePurchase.Model";
 import BasePurchaseSchema, { BasePurchaseItemSchema } from "./BasePurchase.Schema";
 
@@ -11,9 +13,67 @@ class BasePurchaseService {
   }
 
   async create(model: IBasePurchase) {
-    model.name = `Lista ${1 + (await this.count({ owner: model.owner }))}`;
+    if (!model.name) {
+      model.name = `Lista ${1 + (await this.count({ owner: model.owner, visible: true }))}`;
+    }
     model.createdAt = model.updatedAt = formatDate(moment());
     return BasePurchaseSchema.create(model);
+  }
+
+  async copyFromPurchase(owner, name, purchaseId: string, visible: boolean = false) {
+    if (!name) {
+      name = `Lista ${1 + (await this.count({ owner: owner, visible: true }))}`;
+    }
+
+    const purchaseItems = await PurchaseService.findItems(purchaseId);
+
+    const items = await this.parsePurchaseItems<IPurchaseItem>(purchaseItems);
+
+    const model: IBasePurchase = {
+      owner,
+      name,
+      visible,
+      items,
+    };
+
+    return this.create(model);
+  }
+
+  async copy(owner, name, purchaseId: string, visible: boolean = false) {
+    if (!name) {
+      name = `Lista ${1 + (await this.count({ owner: owner, visible: true }))}`;
+    }
+
+    const purchaseItems = await this.findItems(purchaseId);
+
+    const items = await this.parsePurchaseItems<IBasePurchaseItem>(purchaseItems);
+
+    const model: IBasePurchase = {
+      owner,
+      name,
+      visible,
+      items,
+    };
+
+    return this.create(model);
+  }
+
+  async parsePurchaseItems<T>(itemsDoc: Document<T>[]): Promise<Array<Types.ObjectId>> {
+    const items: Array<Types.ObjectId> = new Array();
+
+    for (let index in itemsDoc) {
+      const itemDoc: Document<T> = itemsDoc[index];
+
+      const itemModel: IBasePurchaseItem = {
+        product: itemDoc.get('product'),
+        quantity: itemDoc.get('quantity'),
+      };
+
+      const item = await BasePurchaseItemSchema.create(itemModel);
+      items.push(Types.ObjectId(item.id));
+    }
+
+    return items;
   }
 
   public async delete(model_id: string) {

@@ -9,6 +9,14 @@ import ProductValidator from '../product/Product.Validator';
 import PurchaseService from './Purchase.Service';
 
 class PurchaseValidator {
+  async validate_exist(id: string, fieldName: string = "purchase_id") {
+    CommonValidator.validate_object_id(id, fieldName);
+
+    if (!(await PurchaseService.exist({ _id: id }))) {
+      throw new PurchaseNotFoundError();
+    }
+  }
+
   validate_limit(limit: number) {
     CommonValidator.validate_number(limit, 'limit');
 

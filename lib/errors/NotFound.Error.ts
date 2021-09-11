@@ -4,7 +4,7 @@ export interface INotFoundError {
   code: string;
 }
 
-export class UserNotFoundError extends Error  implements INotFoundError {
+export class UserNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -15,7 +15,7 @@ export class UserNotFoundError extends Error  implements INotFoundError {
   }
 }
 
-export class FriendshipNotFoundError extends Error  implements INotFoundError {
+export class FriendshipNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -26,7 +26,7 @@ export class FriendshipNotFoundError extends Error  implements INotFoundError {
   }
 }
 
-export class MarketNotFoundError extends Error  implements INotFoundError {
+export class MarketNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -37,7 +37,7 @@ export class MarketNotFoundError extends Error  implements INotFoundError {
   }
 }
 
-export class PurchaseNotFoundError extends Error  implements INotFoundError {
+export class PurchaseNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -48,7 +48,7 @@ export class PurchaseNotFoundError extends Error  implements INotFoundError {
   }
 }
 
-export class PurchaseItemNotFoundError extends Error  implements INotFoundError {
+export class PurchaseItemNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -59,7 +59,7 @@ export class PurchaseItemNotFoundError extends Error  implements INotFoundError 
   }
 }
 
-export class ProductNotFoundError extends Error  implements INotFoundError {
+export class ProductNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
@@ -70,13 +70,35 @@ export class ProductNotFoundError extends Error  implements INotFoundError {
   }
 }
 
-export class FavoriteNotFoundError extends Error  implements INotFoundError {
+export class FavoriteNotFoundError extends Error implements INotFoundError {
   public code: string;
 
   constructor() {
     super("Favorite not found!");
 
     this.code = ERROR_CODE.FAVORITE_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
+
+export class ProductMarketNotFoundError extends Error implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("ProductMarket not found!");
+
+    this.code = ERROR_CODE.PRODUCT_MARKET_NOT_FOUND;
+    this.name = ERROR_NAME.NOT_FOUND;
+  }
+}
+
+export class PostNotFoundError extends Error implements INotFoundError {
+  public code: string;
+
+  constructor() {
+    super("Post not found!");
+
+    this.code = ERROR_CODE.POST_NOT_FOUND;
     this.name = ERROR_NAME.NOT_FOUND;
   }
 }

@@ -29,6 +29,11 @@ const BasePurchaseSchema = new mongoose.Schema({
     ref: DBModels.BASE_PURCHASE_ITEM,
     default: [],
   },
+  visible: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
   createdAt: {
     type: String,
     required: true,

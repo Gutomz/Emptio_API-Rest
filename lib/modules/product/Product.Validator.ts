@@ -5,8 +5,8 @@ import ProductService from "./Product.Service";
 
 class ProductValidator {
 
-  async validate_product_exist(id: string) {
-    CommonValidator.validate_object_id(id, 'product_id');
+  async validate_product_exist(id: string, fieldName: string = "product_id") {
+    CommonValidator.validate_object_id(id, fieldName);
 
     if (!(await ProductService.exist({ _id: id }))) {
       throw new ProductNotFoundError();

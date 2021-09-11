@@ -26,6 +26,10 @@ const ProductMarketSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  createdAt: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model(DBModels.PRODUCT_MARKET, ProductMarketSchema);

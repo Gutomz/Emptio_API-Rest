@@ -14,7 +14,7 @@ class FriendshipService {
   }
 
   public async isFriend(user: any, friendId: string): Promise<boolean> {
-    const friendship = await FriendshipSchema.findOne({ owner: user.id, friend: friendId });
+    const friendship = await FriendshipSchema.findOne({ owner: user.id, friend: friendId, status: FRIENDSHIP_STATUS.ACCEPTED });
 
     return !!(friendship);
   }
@@ -109,6 +109,13 @@ class FriendshipService {
     }));
 
     return requests;
+  }
+
+  public async getFollowingList(user_id: string) {
+    const friendships = await FriendshipSchema.find({ owner: user_id, status: FRIENDSHIP_STATUS.ACCEPTED })
+      .select("friend");
+
+    return friendships.map((friendship) => friendship.get("friend"));
   }
 
   public async getRequestsCount(id: string) {

@@ -28,7 +28,7 @@ export default class FirebaseService {
     await this.sendToDevicePromise(registrationToken, payload);
   }
 
-  static createPayload({ title, body, badge = '1', priority = 'normal' }): IMessagingPayload {
+  static createPayload({ title, body, badge = '1', priority = 'normal', data = {} }): IMessagingPayload {
     return {
       notification: {
         title,
@@ -37,6 +37,7 @@ export default class FirebaseService {
       },
       data: {
         priority,
+        ...data,
       },
     };
   }

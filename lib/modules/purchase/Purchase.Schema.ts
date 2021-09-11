@@ -21,6 +21,11 @@ const _PurchaseItemSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  completedProductMarket: {
+    type: mongoose.Types.ObjectId,
+    ref: DBModels.PRODUCT_MARKET,
+    default: null,
+  },
 });
 
 const PurchaseSchema = new mongoose.Schema({
@@ -59,6 +64,6 @@ const PurchaseSchema = new mongoose.Schema({
   },
 });
 
-export const PurchaseItemSchema = 
-               mongoose.model(DBModels.PURCHASE_ITEM, _PurchaseItemSchema);
+export const PurchaseItemSchema =
+  mongoose.model(DBModels.PURCHASE_ITEM, _PurchaseItemSchema);
 export default mongoose.model(DBModels.PURCHASE, PurchaseSchema);
