@@ -104,7 +104,6 @@ export class FavoritesController {
 
       const { id } = params;
 
-      // TODO - change this to specific call
       const response = await FavoritesService.findByIdPopulated(id);
 
       response_success(res, response);

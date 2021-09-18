@@ -20,5 +20,7 @@ export class ProductRoutes {
 
     // * Get products
     router.get(this.getFullPath(), authMiddleware, this.controller.find);
+
+    router.post(this.getFullPath('/recognize'), authMiddleware, this.controller.recognize)
   }
 }
