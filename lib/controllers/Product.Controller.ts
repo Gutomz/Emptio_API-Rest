@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { FilterQuery } from 'mongoose';
-import { UnimplementedError } from '../errors/Unimplemented.Error';
 import BasePurchaseService from '../modules/base_purchase/BasePurchase.Service';
 import FavoritesService from '../modules/favorites/Favorites.Service';
 import { IProduct } from '../modules/product/Product.Model';
 import ProductService from '../modules/product/Product.Service';
 import ProductValidator from '../modules/product/Product.Validator';
+import ProductRecognizerService from '../modules/product_recognizer/ProductRecognizer.Service';
 import PurchaseService from '../modules/purchase/Purchase.Service';
 import { response_handleError, response_success } from "../utils/http_response";
 import { parseSearch } from '../utils/query_parser';
@@ -119,8 +119,7 @@ export class ProductController {
 
       const { image, purchase_id } = body;
 
-      // TODO - call recognizer
-      const recognizedClass = "ops"
+      const recognizedClass = await ProductRecognizerService.predict(image);
 
       let market_id = "";
       let excludeList = [];

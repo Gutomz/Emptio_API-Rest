@@ -13,8 +13,8 @@ class FriendshipService {
     return !!(friendship);
   }
 
-  public async isFriend(user: any, friendId: string): Promise<boolean> {
-    const friendship = await FriendshipSchema.findOne({ owner: user.id, friend: friendId, status: FRIENDSHIP_STATUS.ACCEPTED });
+  public async isFriend(userId: any, friendId: string): Promise<boolean> {
+    const friendship = await FriendshipSchema.findOne({ owner: userId, friend: friendId, status: FRIENDSHIP_STATUS.ACCEPTED });
 
     return !!(friendship);
   }

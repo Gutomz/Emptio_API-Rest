@@ -11,12 +11,18 @@ export function generateRandomCode(length: Number) {
   return result;
 }
 
+export function splitBase64Data(base64: string) {
+  const [mime, data] = base64.split(";base64,");
+
+  return { mime: mime.replace('data:', ''), data };
+}
+
 export function parseLocation(location: string): ILocation {
-  if(!location) return null;
+  if (!location) return null;
 
   const coords = location.split(',');
 
-  if(coords.length !== 2) return null;
+  if (coords.length !== 2) return null;
 
   try {
     let lat = parseFloat(coords[0]);
@@ -25,5 +31,5 @@ export function parseLocation(location: string): ILocation {
     return { lat, lng };
   } catch (error) {
     return null;
-  }  
+  }
 }
