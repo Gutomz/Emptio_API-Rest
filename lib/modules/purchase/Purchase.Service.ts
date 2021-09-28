@@ -37,7 +37,7 @@ class PurchaseService {
       const itemsDoc = await BasePurchaseService.findItems(basePurchase_id);
       const items: Array<Types.ObjectId> = await this.parseBasePurchaseItems(itemsDoc);
 
-      this.updateById(purchase.id, { $push: { items } });
+      await this.updateById(purchase.id, { $push: { items } });
     }
 
     return this.findByIdPopulated(purchase.id);

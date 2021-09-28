@@ -16,7 +16,7 @@ export class ProductController {
     try {
       await ProductValidator.validate_create(req.body);
 
-      const { brand, name, variation, weight, tags } = req.body;
+      const { brand, name, variation, weight, tags, image } = req.body;
 
       const product: IProduct = {
         brand,
@@ -24,6 +24,7 @@ export class ProductController {
         variation,
         weight,
         tags,
+        image,
       };
 
       const response = await ProductService.create(product);
@@ -134,9 +135,15 @@ export class ProductController {
         }
       }
 
+      const { name, brand, variation } = ProductRecognizerService.parseClass(recognizedClass);
+
       const filter: FilterQuery<IProduct> = {
         _id: { $nin: excludeList },
-        ...parseSearch(recognizedClass, ["brand", "name", "variation"]),
+        $and: [
+          { name: { $regex: name, $options: 'ix' } },
+          { brand: { $regex: brand, $options: 'ix' } },
+          { variation: { $regex: variation, $options: 'ix' } },
+        ],
       };
 
       let response;

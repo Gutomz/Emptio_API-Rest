@@ -7,7 +7,6 @@ export default class ProductRecognizerService {
 
   static async predict(base64Image: string) {
     try {
-      console.log("Predict product")
       const { data, mime } = splitBase64Data(base64Image);
 
       const request_data = {
@@ -18,10 +17,22 @@ export default class ProductRecognizerService {
       const service_url = ProductRecognizerService.mUrl + "/predict";
 
       const request = await axios.post(service_url, request_data, { responseType: "json" });
-      console.log(request.data);
+      console.log("Predicted: " + request.data.prediction);
       return request.data.prediction;
     } catch (error) {
       throw new ProductNotFoundError()
     }
+  }
+
+  static parseClass(recognizedClass: string) {
+    const parts = recognizedClass.split("_-_");
+
+    console.log(parts);
+
+    return {
+      name: parts[0],
+      brand: parts[1],
+      variation: parts[2],
+    };
   }
 }

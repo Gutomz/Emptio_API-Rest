@@ -76,17 +76,19 @@ class ProductMarketService {
     for (let index in favorites) {
       const favorite = favorites[index];
 
-      // TODO - don't notify model.updatedBy user
+      const receiver = favorite.get("owner");
 
-      const notification: INotification = {
-        title: `Alerta de Preço`,
-        body: `O preço do produto ${product.get('name')} - ${product.get('variation')} `
-          + `está custando R$ ${model.price.toPrecision(2).replace('.', ',')} `
-          + `no mercado ${market.get('name')}`,
-        owner: favorite.get("owner"),
+      if (model.updatedBy !== receiver) {
+        const notification: INotification = {
+          title: `Alerta de Preço`,
+          body: `O preço do produto ${product.get('name')} - ${product.get('variation')} `
+            + `está custando R$ ${model.price.toPrecision(2).replace('.', ',')} `
+            + `no mercado ${market.get('name')}`,
+          owner: receiver,
+        }
+
+        NotificationService.create(notification);
       }
-
-      NotificationService.create(notification);
     }
   }
 }

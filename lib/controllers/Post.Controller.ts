@@ -83,10 +83,7 @@ export class PostController {
     try {
       const { params } = req;
 
-      // const { user } = body;
       const { id } = params;
-
-      // TODO - check if requesting user is friend of owner of post id
 
       const response = await PostService.findByIdPopulated(id);
 

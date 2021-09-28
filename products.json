@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Achocolatado",
+    "brand": "Ovomaltine",
+    "variation": "Flocos Crocantes",
+    "weight": {
+      "value": 400,
+      "unit": "g"
+    },
+    "tags": ["achocolatado", "chocolate-em-pó", "crocante", "flocos"],
+    "image": ""
+  },
+  {
+    "name": "Açucar",
+    "brand": "União",
+    "variation": "Refinado",
+    "weight": {
+      "value": 1,
+      "unit": "Kg"
+    },
+    "tags": ["açuca refinado"],
+    "image": ""
+  },
+  {
+    "name": "Arroz",
+    "brand": "Tio João",
+    "variation": "",
+    "weight": {
+      "value": 1,
+      "unit": "Kg"
+    },
+    "tags": ["branco", "tipo 1"],
+    "image": ""
+  },
+  {
+    "name": "Feijão",
+    "brand": "Pantera",
+    "variation": "Carioca",
+    "weight": {
+      "value": 1,
+      "unit": "Kg"
+    },
+    "tags": ["premium"],
+    "image": ""
+  },
+  {
+    "name": "Milho Verde",
+    "brand": "Quero",
+    "variation": "Enlatado",
+    "weight": {
+      "value": 250,
+      "unit": "g"
+    },
+    "tags": ["milho", "milho enlatado"],
+    "image": ""
+  },
+  {
+    "name": "Negresco",
+    "brand": "Nestle",
+    "variation": "",
+    "weight": {
+      "value": 140,
+      "unit": "g"
+    },
+    "tags": ["bolacha"],
+    "image": ""
+  },
+  {
+    "name": "Refrigerante",
+    "brand": "Coca-Cola",
+    "variation": "Garrafa",
+    "weight": {
+      "value": 200,
+      "unit": "ml"
+    },
+    "tags": ["coca", "original", "refrigerante de cola"],
+    "image": ""
+  },
+  {
+    "name": "Refrigerante",
+    "brand": "Coca-Cola",
+    "variation": "Lata",
+    "weight": {
+      "value": 220,
+      "unit": "ml"
+    },
+    "tags": ["coca", "original", "refrigerante de cola", "latinha"],
+    "image": ""
+  },
+  {
+    "name": "Refrigerante",
+    "brand": "Guaraná",
+    "variation": "Lata",
+    "weight": {
+      "value": 269,
+      "unit": "ml"
+    },
+    "tags": ["original", "latinha"],
+    "image": ""
+  },
+  {
+    "name": "Refrigerante",
+    "brand": "Pepsi",
+    "variation": "Garrafa",
+    "weight": {
+      "value": 237,
+      "unit": "ml"
+    },
+    "tags": ["original"],
+    "image": ""
+  }
+]
