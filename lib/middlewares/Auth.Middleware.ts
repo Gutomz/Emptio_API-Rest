@@ -33,7 +33,6 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 
   } catch (error) {
     response_handleError(res, error);
-    next(false);
   }
 }
 
@@ -57,6 +56,5 @@ export async function refreshAuthMiddleware(req: Request, res: Response, next: N
 
   } catch (error) {
     response_handleError(res, error);
-    next(false);
   }
 }

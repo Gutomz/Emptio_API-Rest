@@ -1,9 +1,10 @@
 import axios from "axios";
+import environment from "../../environment";
 import { ProductNotFoundError } from "../../errors/NotFound.Error";
 import { splitBase64Data } from "../../utils/string";
 
 export default class ProductRecognizerService {
-  private static mUrl: string = "http://localhost:5000"
+  private static mUrl: string = environment.getProductRecognizerURL();
 
   static async predict(base64Image: string) {
     try {
@@ -26,8 +27,6 @@ export default class ProductRecognizerService {
 
   static parseClass(recognizedClass: string) {
     const parts = recognizedClass.split("_-_");
-
-    console.log(parts);
 
     return {
       name: parts[0],

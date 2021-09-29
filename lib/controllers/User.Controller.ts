@@ -200,7 +200,7 @@ export class UserController {
 
       const users = await UserService.find({
         $or: [
-          { name: { $regex: search, $options: 'i' } },
+          { name: { $regex: search, $options: 'ix' } },
           { email: { $regex: search, $options: 'i' } }
         ]
       }, null, { limit, skip });

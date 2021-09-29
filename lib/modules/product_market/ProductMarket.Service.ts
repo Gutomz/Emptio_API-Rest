@@ -78,11 +78,11 @@ class ProductMarketService {
 
       const receiver = favorite.get("owner");
 
-      if (model.updatedBy !== receiver) {
+      if (model.updatedBy != receiver) {
         const notification: INotification = {
           title: `Alerta de Preço`,
           body: `O preço do produto ${product.get('name')} - ${product.get('variation')} `
-            + `está custando R$ ${model.price.toPrecision(2).replace('.', ',')} `
+            + `está custando R$ ${model.price.toFixed(2).replace('.', ',')} `
             + `no mercado ${market.get('name')}`,
           owner: receiver,
         }

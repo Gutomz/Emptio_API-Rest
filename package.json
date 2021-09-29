@@ -4,10 +4,9 @@
   "description": "Backend REST API structure project",
   "main": "./dist/index.js",
   "scripts": {
-    "watch-tsc": "tsc -w",
-    "start": "tsc && node ./dist/index.js",
-    "local": "concurrently \"npm:watch-tsc\" \"nodemon ./dist/index.js\"",
-    "test": "ts-node ./lib/index.ts"
+    "dev": "ts-node lib/app.ts",
+    "start": "ts-node dist/app.js",
+    "build": "tsc -p ."
   },
   "author": "Augusto Moço Zambello",
   "license": "ISC",
@@ -34,6 +33,8 @@
     "@types/node": "^15.0.2",
     "@types/nodemailer": "^6.4.1",
     "dotenv": "^9.0.2",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   }
 }

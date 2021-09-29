@@ -20,11 +20,13 @@ export class UploadConfig {
       UploadConfig.marketFolder,
     ];
 
-    for(let index in folders) {
+    for (let index in folders) {
       const folder = folders[index];
 
       this.generateFolder(folder);
     }
+
+    console.log("Connected to UploadServices.");
   }
 
   public static generateFolder(folder: string) {

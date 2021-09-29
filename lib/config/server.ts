@@ -1,9 +1,9 @@
 import * as express from "express";
 import * as mongoose from 'mongoose';
-
 import environment from "../environment";
 import { FirebaseConfig } from "./firebase";
 import { UploadConfig } from "./upload";
+
 
 export class Server {
   public app: express.Application;
@@ -37,7 +37,7 @@ export class Server {
 
       console.log('Connected to database: ' + db.connection.name);
     } catch (e) {
-      console.log('Database connection failed');
+      console.log(`Database connection failed ::: ${this.mongoUrl}`);
       process.exit(1);
     }
   }

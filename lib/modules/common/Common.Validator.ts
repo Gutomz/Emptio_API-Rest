@@ -1,10 +1,10 @@
 import * as email_validator from 'email-validator';
 import { Types } from 'mongoose';
-
 import { InvalidFieldError, MissingFieldError } from '../../errors/Field.Error';
 import { MEASUREMENT_TYPE_LIST } from '../../utils/enums';
 import { parseLocation } from '../../utils/string';
 import { IMeasurement } from './Common.Models';
+
 
 class CommomValidator {
   public validate_field(value, field: string): boolean {
@@ -72,7 +72,7 @@ class CommomValidator {
 
     const parse: IMeasurement = measurement;
 
-    if (!parse.value || !parse.unit) {
+    if ((!parse.value && parse.value !== 0) || !parse.unit) {
       throw new InvalidFieldError(fieldName);
     }
 
