@@ -261,7 +261,7 @@ class PurchaseService {
 
         const completedProductMarket = (await ProductMarketService.update(productMarket)).id;
 
-        this.updateItem(purchase_id, item.id, { completedProductMarket });
+        this.updateItem(purchase_id, item.id, { completedProductMarket, checked: true });
       }
     }
 
