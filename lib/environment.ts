@@ -1,41 +1,40 @@
-enum Environments {
-  local_environment = 'local',
-  dev_environment = 'dev',
-  prod_environment = 'prod',
-  qa_environment = 'qa'
-}
-
 class Environment {
-  private environment: String;
-
-  constructor(environment: String) {
-    this.environment = environment;
-  }
+  public endpoint: string = '/api';
+  public static: string = '/static';
 
   getPort(): Number {
-    if (this.environment === Environments.prod_environment) {
-      return 8081;
-    } else if (this.environment === Environments.dev_environment) {
-      return 8082;
-    } else if (this.environment === Environments.qa_environment) {
-      return 8083;
-    } else {
+    try {
+      return parseInt(process.env.SERVER_PORT);
+    } catch (_) {
       return 3000;
     }
   }
 
-  getDataBasePath(): String {
-    if (this.environment === Environments.prod_environment) {
-      return 'mongodb://localhost/';
-    } else if (this.environment === Environments.dev_environment) {
-      return 'mongodb://localhost/';
-    } else if (this.environment === Environments.qa_environment) {
-      return 'mongodb://localhost/';
-    }
+  getDataBasePath(): string {
+    const { DB_USER, DB_PASS, DB_HOST, DB_PORT, DB_NAME } = process.env;
 
-    return 'mongodb://localhost/example';
+    return `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=admin`;
+  }
+
+  getPrivateKey(): string {
+    return process.env.PRIVATE_KEY;
+  }
+
+  getApiURL(): string {
+    return `http://localhost:${this.getPort()}${this.endpoint}`;
+  }
+
+  getStaticURL(): string {
+    return this.getApiURL() + this.static;
+  }
+
+  getProductRecognizerURL(): string {
+    return `http://${process.env.PR_HOST}:${process.env.PR_PORT}`;
+  }
+ 
+  getGoogleApiKey(): string {
+    return process.env.GOOGLE_PLACES_KEY;
   }
 }
 
-export default new Environment(
-  process.env.ENV || Environments.local_environment);
+export default new Environment();

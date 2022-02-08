@@ -1,7 +1,9 @@
 import * as express from "express";
 import * as mongoose from 'mongoose';
-
 import environment from "../environment";
+import { FirebaseConfig } from "./firebase";
+import { UploadConfig } from "./upload";
+
 
 export class Server {
   public app: express.Application;
@@ -13,13 +15,15 @@ export class Server {
     this.router = router;
     this.config();
     this.mongoSetup();
+    UploadConfig.init();
+    FirebaseConfig.init();
 
-    this.app.use('/api', router);
+    this.app.use(environment.endpoint, router);
   }
 
   private config(): void {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(express.json({ limit: '50mb' }));
+    this.app.use(express.urlencoded({ extended: false, limit: '50mb' }));
   }
 
   private async mongoSetup(): Promise<void> {
@@ -30,10 +34,10 @@ export class Server {
         useCreateIndex: true,
         useFindAndModify: false,
       });
-      
+
       console.log('Connected to database: ' + db.connection.name);
     } catch (e) {
-      console.log('Database connection failed');
+      console.log(`Database connection failed ::: ${this.mongoUrl}`);
       process.exit(1);
     }
   }
